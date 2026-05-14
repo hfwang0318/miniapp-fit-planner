@@ -1,84 +1,84 @@
-# Test Plan
+# 测试计划
 
-## Overview
-This document tracks test cases, bug reports, and verification results for the fit-planner mini program. Tests are added per feature and executed by the Tester agent in Step 5 of the development workflow.
+## 概述
+本文档跟踪 fit-planner 小程序的测试用例、bug 报告和验证结果。测试随功能新增而添加，由 Tester agent 在开发工作流第 5 步执行。
 
-## Cycle 1: Basic Weight Management — Test Results
+## 第一轮：基础体重管理 — 测试结果
 
-**Date**: 2026-05-14
-**Tester**: Agent
-**Verdict**: PASS WITH WARNINGS
-**Merge**: APPROVED
+**日期**：2026-05-14
+**测试者**：Agent
+**结论**：PASS WITH WARNINGS
+**合并**：APPROVED
 
-### Test Cases
+### 测试用例
 
-| ID | Description | Expected | Result |
-|----|-------------|----------|--------|
-| TC-001 | Login flow (no session) | Redirect to login, tap login, auth cloud function, redirect dashboard | PASS |
-| TC-002 | Login flow (existing session) | Skip login, go directly to dashboard | PASS |
-| TC-003 | Create weight record | Form validates, cloud function validates, success, list refreshes | PASS |
-| TC-004 | Create weight record (invalid weight) | Show validation error toast | PASS |
-| TC-005 | Create weight record (future date) | Show "不能记录未来的日期" | PASS |
-| TC-006 | View weight history | List shows records, ordered by date desc | PASS |
-| TC-007 | Edit weight record | Form pre-fills, update, success, list refreshes | PASS |
-| TC-008 | Delete weight record | Confirm modal, delete, success, removed from list | PASS |
-| TC-009 | Pagination (reach bottom) | Load more records when scrolling to bottom | PASS |
-| TC-010 | Empty state (no records) | Show empty state text | PASS |
-| TC-011 | Chart (0 records) | Show "暂无数据" | PASS |
-| TC-012 | Chart (1 record) | Show "需要至少2条记录" | PASS |
-| TC-013 | Chart (2+ records) | Show line chart with grid, labels, data points | PASS |
-| TC-014 | Dashboard (no records) | Show CTA "开始记录体重", empty state | PASS |
-| TC-015 | Dashboard (with records) | Show stats cards, chart, recent entries | PASS |
-| TC-016 | Double-tap prevention | Button disabled while submitting | PASS |
+| ID | 描述 | 预期 | 结果 |
+|----|------|------|------|
+| TC-001 | 登录流程（无会话） | 跳转登录页 → 点击登录 → 鉴权云函数 → 跳转仪表盘 | PASS |
+| TC-002 | 登录流程（已有会话） | 跳过登录，直接进入仪表盘 | PASS |
+| TC-003 | 新增体重记录 | 表单校验 → 云函数校验 → 成功 → 列表刷新 | PASS |
+| TC-004 | 新增体重记录（无效数值） | 显示校验错误提示 | PASS |
+| TC-005 | 新增体重记录（未来日期） | 显示"不能记录未来的日期" | PASS |
+| TC-006 | 查看体重历史 | 列表按日期降序展示记录 | PASS |
+| TC-007 | 编辑体重记录 | 表单预填 → 更新 → 成功 → 列表刷新 | PASS |
+| TC-008 | 删除体重记录 | 确认弹窗 → 删除 → 成功 → 列表移除 | PASS |
+| TC-009 | 分页（滚动到底部） | 加载更多记录 | PASS |
+| TC-010 | 空状态（无记录） | 显示空状态文案 | PASS |
+| TC-011 | 图表（0 条记录） | 显示"暂无数据" | PASS |
+| TC-012 | 图表（1 条记录） | 显示"需要至少2条记录" | PASS |
+| TC-013 | 图表（2+ 条记录） | 显示折线图，含网格、标签、数据点 | PASS |
+| TC-014 | 仪表盘（无记录） | 显示号召按钮"开始记录体重"、空状态 | PASS |
+| TC-015 | 仪表盘（有记录） | 显示统计卡片、图表、最近记录 | PASS |
+| TC-016 | 防止重复点击 | 提交中按钮置灰，第二次点击无效 | PASS |
 
-### Bugs Found
+### 发现的 Bug
 
-| ID | Severity | Description | Status |
-|----|----------|-------------|--------|
-| B-001 | P2 | Cloud function catch handler logged raw error objects | Fixed (log only .message) |
+| ID | 严重程度 | 描述 | 状态 |
+|----|----------|------|------|
+| B-001 | P2 | 云函数 catch 处理中记录了原始 error 对象 | 已修复（仅记录 .message） |
 
-### Architecture Compliance
+### 架构合规
 
-| Check | Result |
-|-------|--------|
-| Pages call only services (no direct cloud function or DB access) | PASS |
-| All async operations have error handling | PASS |
-| Loading states for async operations | PASS |
-| Empty states for list views | PASS |
-| Form validation before submission | PASS |
-| No unsupported Web APIs | PASS |
-| No debug code left in | PASS |
-| No references to deleted demo code | PASS |
+| 检查项 | 结果 |
+|--------|------|
+| 页面仅调用服务层（未直接调用云函数或数据库） | 通过 |
+| 所有异步操作有错误处理 | 通过 |
+| 异步操作有加载状态 | 通过 |
+| 列表视图有空状态 | 通过 |
+| 表单提交前有验证 | 通过 |
+| 未使用不支持的 Web API | 通过 |
+| 无残留调试代码 | 通过 |
+| 无引用已删除的演示代码 | 通过 |
 
-### Privacy Compliance
+### 隐私合规
 
-| Check | Result |
-|-------|--------|
-| Cloud functions use cloud.getWXContext().OPENID | PASS |
-| Ownership verified server-side (update/delete) | PASS |
-| No raw weight in console.log | PASS |
-| Weight display uses formatWeight() | PASS |
+| 检查项 | 结果 |
+|--------|------|
+| 云函数使用 cloud.getWXContext().OPENID | 通过 |
+| 写入操作服务端验证所有权 | 通过 |
+| console.log 中无原始体重值 | 通过 |
+| 体重展示使用 formatWeight() | 通过 |
 
 ---
 
-## Test Cases (Pending — Future Features)
+## 测试用例（待执行 — 后续功能）
 
-### Auth
-| ID | Description | Preconditions | Steps | Expected Result | Status |
-|----|-------------|---------------|-------|-----------------|--------|
-| TC-AUTH-001 | Login success (first time) | Fresh install | Open app, tap Login | Redirect to dashboard, user created | Done |
-| TC-AUTH-002 | Login success (returning user) | Existing session cached | Open app | Auto-login, redirect to dashboard | Done |
+### 鉴权
+| ID | 描述 | 前置条件 | 步骤 | 预期结果 | 状态 |
+|----|------|----------|------|----------|------|
+| TC-AUTH-001 | 首次登录成功 | 全新安装 | 打开应用，点击登录按钮 | 跳转仪表盘，数据库创建用户 | 已完成 |
+| TC-AUTH-002 | 回访用户登录成功 | 已有缓存会话 | 打开应用 | 自动登录，跳转仪表盘 | 已完成 |
 
-### Team
-| ID | Description | Preconditions | Steps | Expected Result | Status |
-|----|-------------|---------------|-------|-----------------|--------|
-| TC-TEAM-001 | Create team success | Logged in | Enter team name, tap create | Team created, admin role, invite code shown | Pending |
-| TC-TEAM-002 | Create team empty name | Logged in | Leave name empty, tap create | Show validation error | Pending |
-| TC-TEAM-003 | Join team valid code | Logged in, valid code | Enter code, tap join | Join success, redirect to team | Pending |
-| TC-TEAM-004 | Join team invalid code | Logged in | Enter invalid code | Show error | Pending |
+### 团队
+| ID | 描述 | 前置条件 | 步骤 | 预期结果 | 状态 |
+|----|------|----------|------|----------|------|
+| TC-TEAM-001 | 创建团队成功 | 已登录 | 输入团队名称，点击创建 | 团队创建成功，用户为 admin，显示邀请码 | 待测试 |
+| TC-TEAM-002 | 创建团队名称为空 | 已登录 | 不填名称，点击创建 | 显示校验错误 | 待测试 |
+| TC-TEAM-003 | 有效邀请码加入 | 已登录，存在有效邀请码 | 输入邀请码，点击加入 | 加入成功，跳转团队页 | 待测试 |
+| TC-TEAM-004 | 无效邀请码加入 | 已登录 | 输入无效邀请码 | 显示错误提示 | 待测试 |
 
-## Bug Log
+## Bug 记录
 
-| ID | Feature | Severity | Description | Status | Date |
-|----|---------|----------|-------------|--------|------|
-| B-001 | Weight cloud function | P2 | Error catch handler logged raw error objects | Fixed | 2026-05-14 |
+| ID | 功能 | 严重程度 | 描述 | 状态 | 日期 |
+|----|------|----------|------|------|------|
+| B-001 | 体重云函数 | P2 | catch 处理中记录了原始 error 对象 | 已修复 | 2026-05-14 |

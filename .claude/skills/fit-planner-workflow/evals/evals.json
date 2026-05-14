@@ -4,19 +4,19 @@
     {
       "id": 1,
       "prompt": "我刚 clone 了这个 fit-planner 项目，现在想开始开发。帮我初始化项目的开发环境和文档结构。",
-      "expected_output": "Skill triggers initialization workflow: checks git status, creates docs/ directory with all foundation files (product-requirements.md, feature-list.md, task-board.md, architecture.md, data-model.md, api-contract.md, test-plan.md, decisions.md, changelog.md, git-workflow.md), updates README.md, evaluates technology choices, creates MVP plan, and outputs next recommended task (user login).",
+      "expected_output": "触发初始化工作流：检查 git 状态，创建 docs/ 目录及所有基础文件（product-requirements.md、feature-list.md、task-board.md、architecture.md、data-model.md、api-contract.md、test-plan.md、decisions.md、changelog.md、git-workflow.md），更新 README.md，评估技术选型，创建 MVP 计划，输出推荐首步任务（用户登录）。",
       "files": []
     },
     {
       "id": 2,
       "prompt": "我想添加团队创建功能。用户应该能创建团队、设置团队名称，创建后自动成为管理员。请帮我实现。",
-      "expected_output": "Skill triggers the 6-step workflow: Orchestrator analyzes requirement, splits into tasks, updates docs. Architect designs or confirms no architecture change needed. Developer implements on feature/team-creation branch. Architect reviews code. Tester tests. Orchestrator wraps up with commit and merge. Each step follows the templates in workflow-templates.md. Privacy check confirms no weight data exposure in team creation.",
+      "expected_output": "触发 6 步工作流：Orchestrator 分析需求，拆分任务，更新文档。Architect 设计或确认无架构变更。Developer 在 feature/team-creation 分支实现。Architect 审查代码。Tester 测试。Orchestrator 收尾提交合并。每步按 workflow-templates.md 模板输出。隐私检查确认团队创建中无体重数据暴露。",
       "files": []
     },
     {
       "id": 3,
       "prompt": "recordWeight 云函数有个 bug：当用户在同一天记录两次体重时，第二次记录会覆盖第一次，而不是创建新的记录。帮我修复。",
-      "expected_output": "Orchestrator analyzes the bug, classifies as P0/P1, creates fix task. Developer creates fix/duplicate-weight-record branch, fixes the cloud function to allow multiple same-day records (change upsert to insert logic). Architect reviews for data integrity. Tester verifies the fix with test cases (same day, different days, edge cases). Privacy check confirms no weight data leak. Merge to main.",
+      "expected_output": "Orchestrator 分析 bug，归类为 P0/P1，创建 fix 任务。Developer 创建 fix/duplicate-weight-record 分支，修复云函数允许同日多次记录（将 upsert 逻辑改为 insert）。Architect 审查数据完整性。Tester 验证修复（同日、不同日、边界情况）。隐私检查确认无体重数据泄露。合并到 main。",
       "files": []
     }
   ]

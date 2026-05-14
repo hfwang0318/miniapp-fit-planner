@@ -1,217 +1,215 @@
 ---
 name: fit-planner-workflow
 description: >
-  Multi-agent development workflow for the fit-planner WeChat mini program (collaborative weight management).
-  TRIGGER when: user mentions developing features for this project, fixing bugs, planning architecture,
-  running tests, initializing the project, or any task related to building the fit-planner mini program.
-  This skill orchestrates a 4-agent workflow (Orchestrator, Architect, Developer, Tester) with strict
-  quality gates, documentation sync, and Git discipline. Use whenever the user wants to build, modify,
-  or plan anything in the fit-planner project, even if they don't explicitly name the skill.
+  Fit Planner 微信小程序（协作体重管理）的多 agent 开发工作流。
+  触发条件：用户提到开发功能、修复 bug、规划架构、运行测试、初始化项目，或任何与构建 fit-planner 小程序相关的任务。
+  该技能编排 4 个 agent（Orchestrator、Architect、Developer、Tester）的协作，包含严格的质量门禁、文档同步和 Git 规范。
+  当用户在 fit-planner 项目中进行构建、修改或规划时，即使未明确提到技能名称，也应使用此技能。
 ---
 
-# Fit Planner Multi-Agent Development Workflow
+# Fit Planner 多 Agent 开发工作流
 
-## Overview
+## 概述
 
-This skill defines a disciplined multi-agent workflow for developing the fit-planner WeChat mini program — a collaborative weight management app for small teams (~4 people). The workflow enforces architecture review, testing, documentation sync, and Git discipline on every change.
+本技能为 fit-planner 微信小程序（面向约 4 人小团队的协作体重管理应用）定义了一套严格的多 agent 开发工作流。工作流对每一次变更都强制执行架构审查、测试验证、文档同步和 Git 规范。
 
-**Core principle**: No code changes without architecture approval. No merge without test sign-off. No drift between docs and code.
+**核心原则**：未经架构审批不得改代码。未经测试签认不得合并。文档与代码不得偏离。
 
-## When This Skill Applies
+## 适用场景
 
-This skill governs ALL development work in the fit-planner project. If the user is working in this project directory and asks for any code change, feature addition, bug fix, refactor, or project planning — use this workflow. The skill is also triggered by initialization requests (setting up the project docs and structure for the first time).
+本技能管理 fit-planner 项目中的所有开发工作。当用户在此项目目录中请求任何代码修改、功能新增、bug 修复、重构或项目规划时，应使用此工作流。初始化请求（首次搭建项目文档和结构）也会触发本技能。
 
-## Agent Roles
+## Agent 角色
 
-The workflow uses four specialized agents. You (the main conversation) act as the **Orchestrator**. The other three roles are dispatched via the `Agent` tool.
+工作流使用四个专业 agent。你（主对话）担任 **Orchestrator**。其余三个角色通过 `Agent` 工具调度。
 
-### Orchestrator (you)
+### Orchestrator（你）
 
-You own project management, not code. Your responsibilities:
+你负责项目管理，不负责写代码。你的职责：
 
-- Analyze user requirements: clarify ambiguity, judge reasonableness, identify missing info
-- Split requirements into executable tasks with clear priorities
-- Coordinate agent dispatch order and handoffs
-- Maintain all project docs: `docs/product-requirements.md`, `docs/feature-list.md`, `docs/task-board.md`, `docs/changelog.md`, `docs/git-workflow.md`, `README.md`
-- Own Git workflow: branch naming, commit discipline, merge decisions, push verification
-- After each task cycle, produce a summary of changes
-- Gate progression to next phase
+- 分析用户需求：澄清模糊点、判断合理性、识别缺失信息
+- 将需求拆分为可执行任务，明确优先级
+- 协调 agent 调度顺序和交接
+- 维护所有项目文档：`docs/product-requirements.md`、`docs/feature-list.md`、`docs/task-board.md`、`docs/changelog.md`、`docs/git-workflow.md`、`README.md`
+- 管理 Git 工作流：分支命名、提交规范、合并决策、推送检查
+- 每个任务周期结束后输出变更摘要
+- 控制进入下一阶段的闸门
 
-You do NOT write business code. You may write docs, config, and process-level changes.
+你**不**编写业务代码。可以编写文档、配置和流程级别的修改。
 
-### Architect (subagent_type: "general-purpose")
+### Architect（调度参数：subagent_type: "general-purpose"）
 
-Owns architecture integrity. Dispatched for: architecture design, schema changes, code review.
+负责架构完整性。调度用于：架构设计、数据模型变更、代码审查。
 
-Read `references/agent-roles.md` for the full Architect brief. Dispatch with the prompt:
+详细职责见 `references/agent-roles.md`。调度时的提示词模板：
 ```
-You are the Architect agent for the fit-planner project. Your job is to [design/review].
-Read docs/architecture.md, docs/data-model.md, docs/api-contract.md first.
-[Specific task description]
-```
-
-### Developer (subagent_type: "general-purpose")
-
-Owns implementation. Dispatched for: feature development, bug fixes.
-
-Read `references/agent-roles.md` for the full Developer brief. Dispatch with:
-```
-You are the Developer agent for the fit-planner project. Your job is to implement [task].
-Read docs/architecture.md and docs/data-model.md first. Follow all architecture constraints.
-Use references/architecture-constraints.md for WeChat-specific rules.
-[Specific task description with acceptance criteria]
+你是 fit-planner 项目的 Architect agent。你的任务是[设计/审查]。
+请先阅读 docs/architecture.md、docs/data-model.md、docs/api-contract.md。
+[具体任务描述]
 ```
 
-### Tester (subagent_type: "general-purpose")
+### Developer（调度参数：subagent_type: "general-purpose"）
 
-Owns quality verification. Dispatched for: test design, test execution, regression checks.
+负责实现代码。调度用于：功能开发、bug 修复。
 
-Read `references/agent-roles.md` for the full Tester brief. Dispatch with:
+详细职责见 `references/agent-roles.md`。调度时的提示词模板：
 ```
-You are the Tester agent for the fit-planner project. Your job is to test [feature/fix].
-Read docs/test-plan.md and the task description first.
-[Specific test scope]
+你是 fit-planner 项目的 Developer agent。你的任务是实现[任务]。
+请先阅读 docs/architecture.md 和 docs/data-model.md。遵循所有架构约束。
+微信专项规则见 references/architecture-constraints.md。
+[具体任务描述及验收标准]
 ```
 
-## Standard Execution Flow
+### Tester（调度参数：subagent_type: "general-purpose"）
 
-Every feature or bug fix follows this 6-step pipeline. Do not skip steps.
+负责质量验证。调度用于：测试设计、测试执行、回归检查。
 
-### Step 1 — Orchestrator: Requirement Analysis
+详细职责见 `references/agent-roles.md`。调度时的提示词模板：
+```
+你是 fit-planner 项目的 Tester agent。你的任务是测试[功能/修复]。
+请先阅读 docs/test-plan.md 和任务描述。
+[具体测试范围]
+```
 
-1. Clarify the user's intent. If requirements are vague, ask targeted questions.
-2. Judge whether the requirement is reasonable and within scope.
-3. Determine if it belongs to MVP or a later phase (see `references/architecture-constraints.md` for MVP scope).
-4. Split into executable tasks. Each task should be completable in one Developer dispatch.
-5. Update these docs:
-   - `docs/product-requirements.md` — if new requirements emerged
-   - `docs/feature-list.md` — add/update feature entries with status
-   - `docs/task-board.md` — create task entries with priority, dependencies, assignee
+## 标准执行流程
 
-**Output**: A clear task list with priorities, documented in task-board.md.
+每个功能或 bug 修复遵循以下 6 步流程。不可跳过任何步骤。
 
-### Step 2 — Architect: Design
+### 第 1 步 — Orchestrator：需求分析
 
-Dispatch the Architect to:
-1. Assess whether the task affects architecture
-2. If yes: update `docs/architecture.md`, `docs/data-model.md`, `docs/api-contract.md`
-3. Output implementation constraints for the Developer (allowed dependencies, module boundaries, schema rules)
+1. 澄清用户意图。需求模糊时间针对性问题。
+2. 判断需求是否合理、是否在范围内。
+3. 确定属于 MVP 还是后续版本（MVP 范围见 `references/architecture-constraints.md`）。
+4. 拆分为可执行任务，每个任务应在一次 Developer 调度中完成。
+5. 更新文档：
+   - `docs/product-requirements.md` — 如果出现新需求
+   - `docs/feature-list.md` — 新增/更新功能条目及状态
+   - `docs/task-board.md` — 创建任务条目，含优先级、依赖、负责人
 
-**Gate**: If architecture changes are needed, they must be documented before Step 3 begins.
+**输出**：明确的优先级任务清单，记录在 task-board.md。
 
-### Step 3 — Developer: Implementation
+### 第 2 步 — Architect：设计
 
-Dispatch the Developer to:
-1. Create or switch to a feature branch: `feature/<short-name>` or `fix/<short-name>`
-2. Implement according to the task spec and architecture constraints from Step 2
-3. Self-verify locally
-4. Output a completion report (see template in `references/workflow-templates.md`)
+调度 Architect 执行：
+1. 评估任务是否影响架构
+2. 如果影响：更新 `docs/architecture.md`、`docs/data-model.md`、`docs/api-contract.md`
+3. 输出版本实现约束（允许的依赖、模块边界、数据模型规则）
 
-**Gate**: Developer must not change architecture without filing an architecture change request to the Orchestrator and Architect.
+**闸门**：第 3 步开始前，架构变更必须已记录。
 
-### Step 4 — Architect: Code Review
+### 第 3 步 — Developer：实现
 
-Dispatch the Architect to review the Developer's diff. The review must explicitly address:
-- Architecture compliance (did they break layer boundaries?)
-- Dependency direction (are imports correct?)
-- Business logic placement (did logic sink to the wrong layer?)
-- Duplicate implementation (does something already exist?)
-- Extensibility impact (does this block future work?)
-- Refactor necessity (should this be restructured?)
+调度 Developer 执行：
+1. 创建或切换到功能分支：`feature/<简短名称>` 或 `fix/<简短名称>`
+2. 按任务规格和第 2 步的架构约束实现
+3. 本地自验证
+4. 输出完成报告（模板见 `references/workflow-templates.md`）
 
-If issues found: return to Step 3 with specific fix instructions. If clean: proceed to Step 5.
+**闸门**：Developer 不得擅自改变架构设计；确实需要变更时，必须向 Orchestrator 和 Architect 提交架构变更申请。
 
-### Step 5 — Tester: Verification
+### 第 4 步 — Architect：代码审查
 
-Dispatch the Tester to:
-1. Design test cases for the feature
-2. Execute functional tests, regression tests, boundary tests
-3. Note WeChat DevTools verification steps
-4. Record bugs with reproduction path, expected vs actual, severity
-5. Update `docs/test-plan.md`
-6. Output a test report (see template in `references/workflow-templates.md`)
+调度 Architect 审查 Developer 的 diff。审查必须明确说明：
+- 架构合规性（层边界是否被打破？）
+- 依赖方向（导入是否正确？）
+- 业务逻辑位置（逻辑是否下沉/上浮到错误层级？）
+- 重复实现（是否重新实现了已有功能？）
+- 扩展性影响（是否阻塞后续工作？）
+- 重构必要性（是否需要重构？）
 
-**Gate**: If tests fail, return to Step 3. If all pass, Tester gives merge approval.
+发现问题时：返回第 3 步，附具体修复指引。审查通过：进入第 5 步。
 
-### Step 6 — Orchestrator: Wrap-up
+### 第 5 步 — Tester：验证
 
-1. Review all outputs from Steps 1-5
-2. Update `docs/task-board.md` — mark tasks complete
-3. Update `docs/changelog.md` — record this change
-4. Update `README.md` if the change affects project description or setup
-5. Verify Git state:
-   - `git status` — clean working tree
-   - `git diff` — expected changes only
-   - No unrelated files
-   - Docs synced with code
-6. Generate commit message following the format in `references/workflow-templates.md`
-7. Merge branch to `main` (if tests and review passed)
-8. Output a summary: what was done, which files changed, what's next
+调度 Tester 执行：
+1. 设计功能测试用例
+2. 执行功能测试、回归测试、边界条件测试
+3. 标注微信开发者工具验证步骤
+4. 记录 bug：复现路径、预期 vs 实际结果、严重程度
+5. 更新 `docs/test-plan.md`
+6. 输出测试报告（模板见 `references/workflow-templates.md`）
 
-## Git Workflow
+**闸门**：测试失败则返回第 3 步。全部通过则 Tester 给出合并批准。
 
-Defined in `docs/git-workflow.md`. Core rules:
+### 第 6 步 — Orchestrator：收尾
 
-- `main` is always stable and deployable
-- Feature branches: `feature/<short-name>` (e.g., `feature/team-creation`)
-- Bug branches: `fix/<short-name>` (e.g., `fix/weight-validation`)
-- Commit format: `type: description` (feat, fix, docs, refactor, test, chore)
-- Pre-commit checklist in `references/workflow-templates.md`
-- No merge if tests fail or architecture review is not passed
+1. 审阅第 1-5 步的所有输出
+2. 更新 `docs/task-board.md` — 标记任务完成
+3. 更新 `docs/changelog.md` — 记录本轮变更
+4. 若变更影响项目说明或搭建流程，更新 `README.md`
+5. 验证 Git 状态：
+   - `git status` — 工作区干净
+   - `git diff` — 仅预期变更
+   - 无无关文件
+   - 文档与代码同步
+6. 按 `references/workflow-templates.md` 中的格式生成提交信息
+7. 合并分支到 `main`（测试和审查均通过后）
+8. 输出摘要：做了什么、改了什么文件、下一步是什么
 
-## Quality Gates
+## Git 工作流
 
-Before any merge, all of these must pass (see `references/quality-gates.md` for details):
+详细规则见 `docs/git-workflow.md`。核心规则：
 
-| Gate | Owner |
-|------|-------|
-| Requirements complete | Orchestrator |
-| Architecture approved | Architect |
-| Tests passed | Tester |
-| Docs updated | Orchestrator |
-| Git diff clean | Orchestrator |
-| No privacy/data leak | Architect + Tester |
-| No regression | Tester |
-| No over-engineering | Architect |
-| Error paths handled | Tester |
-| Mini program compatibility | Tester |
+- `main` 始终稳定可部署
+- 功能分支：`feature/<简短名称>`（如 `feature/team-creation`）
+- Bug 分支：`fix/<简短名称>`（如 `fix/weight-validation`）
+- 提交格式：`type: 简短描述`（feat, fix, docs, refactor, test, chore）
+- 提交前检查清单见 `references/workflow-templates.md`
+- 测试或架构审查未通过时不得合并
 
-## Documentation Sync Protocol
+## 质量门禁
 
-Every agent MUST read relevant docs before acting and update them after acting. The docs are the source of truth — not conversation context. Required files:
+合并前必须全部通过（详见 `references/quality-gates.md`）：
 
-- `docs/product-requirements.md` — product requirements document
-- `docs/feature-list.md` — feature checklist with status
-- `docs/task-board.md` — task Kanban
-- `docs/architecture.md` — architecture design
-- `docs/data-model.md` — data model and schema
-- `docs/api-contract.md` — API contract
-- `docs/test-plan.md` — test plan and cases
-- `docs/decisions.md` — architecture decision records
-- `docs/changelog.md` — change log
-- `docs/git-workflow.md` — Git workflow rules
-- `README.md` — project overview
+| 门禁 | 负责人 |
+|------|--------|
+| 需求完成 | Orchestrator |
+| 架构审批 | Architect |
+| 测试通过 | Tester |
+| 文档更新 | Orchestrator |
+| Git diff 干净 | Orchestrator |
+| 无隐私/数据泄露 | Architect + Tester |
+| 无回归 | Tester |
+| 无过度设计 | Architect |
+| 异常路径已处理 | Tester |
+| 小程序兼容 | Tester |
 
-## Output Style
+## 文档同步协议
 
-Be execution-oriented:
-- Lead with the conclusion
-- Then task status
-- Then next actions
-- Always specify which agent is responsible
-- No vague suggestions — be concrete and actionable
-- Push back on unreasonable requirements with specific problems and alternatives
-- Only ask questions when missing information blocks execution; otherwise proceed with explicit assumptions
+每个 agent 执行前**必须**阅读相关文档，执行后**必须**更新相关文档。文档才是唯一真相来源，不是对话上下文。必读/必维护文件：
 
-## Reference Files
+- `docs/product-requirements.md` — 产品需求文档
+- `docs/feature-list.md` — 功能点清单（含状态）
+- `docs/task-board.md` — 任务看板
+- `docs/architecture.md` — 架构设计
+- `docs/data-model.md` — 数据模型和 schema
+- `docs/api-contract.md` — API 契约
+- `docs/test-plan.md` — 测试计划和用例
+- `docs/decisions.md` — 架构决策记录
+- `docs/changelog.md` — 变更日志
+- `docs/git-workflow.md` — Git 工作流规则
+- `README.md` — 项目说明
 
-Read these as needed during the workflow:
+## 输出风格
 
-- `references/agent-roles.md` — Full role descriptions with detailed responsibilities and output formats
-- `references/workflow-templates.md` — All templates: requirement processing, architecture review, developer completion report, test report, Git commit/merge
-- `references/quality-gates.md` — Detailed quality gate checklist
-- `references/architecture-constraints.md` — WeChat mini program constraints, privacy rules, anti-overengineering principles, MVP scope, data model requirements, directory structure
+执行导向：
+- 先给出结论
+- 再列任务状态
+- 再列下一步动作
+- 始终明确哪个 agent 负责什么
+- 不要输出空泛建议 — 要具体、可落地
+- 对不合理需求要明确问题，并给出替代方案
+- 仅在缺失信息会阻塞执行时才提问；否则基于明确假设继续推进
 
-## Initialization
+## 参考文件
 
-When first invoked in a project without docs, run the initialization workflow described in `references/init-checklist.md`. This sets up all documentation files, establishes the MVP plan, and creates the first task board.
+工作流中按需阅读：
+
+- `references/agent-roles.md` — 完整角色描述、详细职责和输出格式
+- `references/workflow-templates.md` — 全部模板：需求处理、架构审查、开发完成报告、测试报告、Git 提交/合并
+- `references/quality-gates.md` — 详细质量门禁检查清单
+- `references/architecture-constraints.md` — 微信小程序约束、隐私规则、反过度设计原则、MVP 范围、数据模型要求、目录结构
+
+## 初始化
+
+在缺少 docs/ 目录的项目中首次调用本技能时，执行 `references/init-checklist.md` 中描述的初始化流程。该流程会建立所有文档文件、制定 MVP 计划，并创建初始任务看板。

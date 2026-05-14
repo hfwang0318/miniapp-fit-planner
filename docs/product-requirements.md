@@ -1,50 +1,50 @@
-# Product Requirements — Fit Planner
+# 产品需求 — Fit Planner
 
-## Overview
-A WeChat mini program for small teams (~4 people) to manage weight collaboratively. Members join a team, record their weight, set personal goals, view personal trends, and track team progress toward mutual accountability.
+## 概述
+面向小团队（约 4 人）的协作体重管理微信小程序。成员加入团队、记录体重、设置个人目标、查看个人趋势，共同追踪团队进度以实现互相监督。
 
-## Core Scenarios
-- Member joins team (via invitation code)
-- Record weight (with date, value, optional note)
-- Set personal goal weight and target date
-- View personal weight trend (simple chart)
-- View team progress overview (percentage toward goal, NOT raw weight)
-- Daily check-in with mood and optional weight
-- Mutual accountability through team visibility
-- Periodic review of team progress
+## 核心场景
+- 成员加入团队（通过邀请码）
+- 记录体重（含日期、数值、可选备注）
+- 设置个人目标体重和达成日期
+- 查看个人体重趋势（简单图表）
+- 查看团队进度概览（距目标的百分比，**非**原始体重）
+- 每日打卡（含心情和可选体重）
+- 通过团队可见性实现互相监督
+- 阶段性团队进度复盘
 
-## MVP Scope
-See `references/architecture-constraints.md` for full MVP list. MVP includes:
-- User login
-- Create team
-- Join team (via invitation code)
-- Record weight (with date, value)
-- Edit/delete weight record
-- View personal weight trend (simple chart)
-- View team member progress overview (percentage toward goal)
-- Basic permission control (admin vs member)
-- Basic privacy setting (hide raw weight from team)
-- Check-in
-- Dashboard homepage
+## MVP 范围
+完整列表见 `references/architecture-constraints.md`。MVP 包含：
+- 用户登录
+- 创建团队
+- 加入团队（通过邀请码）
+- 记录体重（含日期、数值）
+- 编辑/删除体重记录
+- 查看个人体重趋势（简单图表）
+- 查看团队成员进度概览（距目标的百分比）
+- 基础权限控制（admin vs member）
+- 基础隐私设置（对团队隐藏原始体重）
+- 打卡签到
+- 首页总览
 
-## Post-MVP
-Features deferred to post-MVP:
-- Weekly/monthly reports
-- Leaderboard
-- Data export
-- Subscribe message notifications
-- Advanced charts (BMI, body fat, etc.)
-- Complex admin permissions (moderator, owner transfer)
-- Abnormal data audit
-- Gamification / incentives
-- Invite member (deferred beyond invitation code)
-- Weight unit setting
-- Note/remark on records
-- Share entry
+## 后续版本
+推迟到后续版本的功能：
+- 周报/月报
+- 排行榜
+- 数据导出
+- 订阅消息通知
+- 高级图表（BMI、体脂率等）
+- 复杂管理员权限（moderator、转让）
+- 异常数据审核
+- 游戏化/激励机制
+- 邀请成员（邀请码之外的增强邀请）
+- 体重单位设置
+- 记录备注
+- 分享入口
 
-## Non-Goals
-- Social network features (friend lists, feeds, comments)
-- Integration with external fitness devices or apps
-- Large-scale team management (>20 members)
-- Medical-grade weight tracking or health advice
-- Cross-platform support (iOS/Android only via WeChat)
+## 不做
+- 社交网络功能（好友列表、信息流、评论）
+- 与外部健身设备或应用的集成
+- 大规模团队管理（>20 人）
+- 医疗级别的体重追踪或健康建议
+- 跨平台支持（仅通过微信覆盖 iOS/Android）

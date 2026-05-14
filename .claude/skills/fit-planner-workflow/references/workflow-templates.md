@@ -1,279 +1,279 @@
-# Workflow Templates
+# 工作流模板
 
-## Table of Contents
-1. Requirement Processing Template (Orchestrator)
-2. Architecture Review Template (Architect)
-3. Developer Completion Report (Developer)
-4. Test Report Template (Tester)
-5. Git Commit & Merge Template (Orchestrator)
+## 目录
+1. 需求处理模板（Orchestrator）
+2. 架构审查模板（Architect）
+3. 开发完成报告模板（Developer）
+4. 测试报告模板（Tester）
+5. Git 提交与合并模板（Orchestrator）
 
 ---
 
-## 1. Requirement Processing Template
+## 1. 需求处理模板
 
-Used by: Orchestrator (Step 1)
+使用者：Orchestrator（第 1 步）
 
 ```
-## Requirement Analysis — [Feature Name]
+## 需求分析 — [功能名称]
 
-### User Intent
-[1-2 sentences summarizing what the user wants]
+### 用户意图
+[1-2 句话总结用户想要什么]
 
-### Feasibility Assessment
-- Reasonable: [yes / no — if no, explain why]
-- Within scope: [MVP / post-MVP / out of scope]
-- Missing info: [list only blocking questions; otherwise state assumptions]
+### 可行性评估
+- 合理性：[是 / 否 — 如否，说明原因]
+- 范围归属：[MVP / 后续版本 / 超出范围]
+- 缺失信息：[仅列出阻塞性问题；否则说明基于的假设]
 
-### Task Breakdown
-| ID | Task | Priority | Depends On | Assignee | Estimate |
-|----|------|----------|------------|----------|----------|
-| T-001 | [task description] | P0/P1/P2 | — | Developer | S/M/L |
+### 任务拆分
+| ID | 任务 | 优先级 | 依赖 | 负责人 | 预估 |
+|----|------|--------|------|--------|------|
+| T-001 | [任务描述] | P0/P1/P2 | — | Developer | S/M/L |
 
-### Documents Updated
+### 已更新文档
 - [ ] product-requirements.md
 - [ ] feature-list.md
 - [ ] task-board.md
 
-### Next Step
-Architect design (Step 2) — dispatched to Architect agent
+### 下一步
+Architect 设计（第 2 步）— 调度 Architect agent
 ```
 
 ---
 
-## 2. Architecture Review Template
+## 2. 架构审查模板
 
-Used by: Architect (Step 4)
-
-```
-## Architecture Review — [Feature/Fix Name]
-
-### Reviewed Artifacts
-- Files changed: [list]
-- Architecture docs consulted: [list]
-
-### Review Findings
-
-#### 1. Layer Boundary Compliance
-[Pass / Issues Found]
-- [specific file:line if issue]
-
-#### 2. Dependency Direction
-[Pass / Issues Found]
-- [circular deps, wrong import direction, etc.]
-
-#### 3. Business Logic Placement
-[Pass / Issues Found]
-- [logic in wrong layer, UI logic in service, etc.]
-
-#### 4. Duplication
-[Pass / Issues Found]
-- [what was reimplemented, where it exists already]
-
-#### 5. Extensibility Impact
-[Pass / Concerns]
-- [does this block planned work?]
-
-#### 6. Refactor Necessity
-[None / Recommended]
-- [what should be restructured and why]
-
-### Privacy Check
-- [ ] No raw weight exposure between members
-- [ ] Cloud DB rules are adequate
-- [ ] No sensitive data in logs
-
-### Verdict
-**Status**: APPROVED / CHANGES REQUESTED / BLOCKED
-
-[If not approved]:
-- Required changes:
-  1. [specific instruction]
-  2. [specific instruction]
-- Return to Developer for fixes
-```
-
----
-
-## 3. Developer Completion Report
-
-Used by: Developer (Step 3 output)
+使用者：Architect（第 4 步）
 
 ```
-## Developer Report — [Feature/Fix Name]
+## 架构审查 — [功能/修复名称]
 
-### Branch
-`feature/<name>` or `fix/<name>`
+### 审查对象
+- 变更文件：[列表]
+- 参考的架构文档：[列表]
 
-### Modified Files
-| File | Change | Description |
-|------|--------|-------------|
-| path/to/file.js | Added/Modified/Deleted | What and why |
+### 审查发现
 
-### Core Implementation Notes
-- [Key design decision 1]
-- [Pattern used and why]
-- [Assumption made]
+#### 1. 层边界合规性
+[通过 / 发现问题]
+- [问题描述：具体文件:行号]
 
-### Local Verification
-1. [Step to verify in WeChat DevTools]
-2. [Expected result]
-3. [Screenshots if applicable]
+#### 2. 依赖方向
+[通过 / 发现问题]
+- [循环依赖、错误导入方向等]
 
-### Self-Check
-- [ ] Architecture constraints followed
-- [ ] Privacy rules respected (no raw weight exposure)
-- [ ] Error paths handled
-- [ ] WeChat DevTools build succeeds
-- [ ] No console.errors introduced
-- [ ] No debug code left in
+#### 3. 业务逻辑位置
+[通过 / 发现问题]
+- [逻辑在错误层级、UI 逻辑在服务层等]
 
-### Known Risks
-- [Edge case not handled: description and why deferred]
-- [Assumption that might need validation]
+#### 4. 重复检查
+[通过 / 发现问题]
+- [哪里重新实现了已有功能]
 
-### Impact on Existing Features
-- [Yes/No] — [if yes, what and how]
+#### 5. 扩展性影响
+[通过 / 关注点]
+- [是否阻塞后续计划工作？]
+
+#### 6. 重构必要性
+[无需 / 建议]
+- [需重构的部分及其原因]
+
+### 隐私检查
+- [ ] 无成员间原始体重暴露
+- [ ] 云数据库规则适当
+- [ ] 日志中无敏感数据
+
+### 结论
+**状态**：APPROVED / CHANGES REQUESTED / BLOCKED
+
+[如未通过]：
+- 需要修改：
+  1. [具体修改指引]
+  2. [具体修改指引]
+- 退回 Developer 修复
 ```
 
 ---
 
-## 4. Test Report Template
+## 3. 开发完成报告模板
 
-Used by: Tester (Step 5 output)
+使用者：Developer（第 3 步输出）
 
 ```
-## Test Report — [Feature/Fix Name]
+## 开发报告 — [功能/修复名称]
 
-### Test Scope
-- Features tested: [list]
-- Features NOT tested: [list with reason]
-- Regression areas checked: [list]
+### 分支
+`feature/<名称>` 或 `fix/<名称>`
 
-### Test Cases
-| ID | Description | Expected | Actual | Status |
-|----|-------------|----------|--------|--------|
-| TC-001 | [scenario] | [expected] | [actual] | PASS/FAIL |
+### 修改文件
+| 文件 | 操作 | 说明 |
+|------|------|------|
+| path/to/file.js | 新增/修改/删除 | 做了什么、为什么 |
 
-### Bugs Found
-| Bug ID | Severity | Description | Reproduction | Expected | Actual |
-|--------|----------|-------------|-------------|----------|--------|
-| B-001 | P0/P1/P2 | [what] | [steps] | [should be] | [is] |
+### 核心实现说明
+- [关键设计决策 1]
+- [使用的模式及原因]
+- [做出的假设]
 
-### WeChat DevTools Verification
-- [ ] Build: success / fail
-- [ ] Page render on iPhone 6/7/8: OK / issues
-- [ ] Page render on iPhone X/11/12: OK / issues
-- [ ] Console: clean / warnings / errors (specify)
-- [ ] Network calls: expected / unexpected (specify)
+### 本地验证
+1. [在微信开发者工具中的验证步骤]
+2. [预期结果]
+3. [截图（如适用）]
 
-### Regression Risk Assessment
-[Low / Medium / High] — [explanation]
+### 自检
+- [ ] 架构约束已遵循
+- [ ] 隐私规则已遵守（无原始体重暴露）
+- [ ] 异常路径已处理
+- [ ] 微信开发者工具编译成功
+- [ ] 未引入新的 console.errors
+- [ ] 未残留调试代码
 
-### Verdict
-**Status**: PASS / FAIL / PASS WITH WARNINGS
+### 已知风险
+- [未处理的边界情况：描述及推迟原因]
+- [可能需要验证的假设]
 
-**Merge Recommendation**: APPROVE / BLOCK
-
-[If BLOCK]: List all blocking items with owner assignment.
-[If PASS WITH WARNINGS]: List warnings that should be addressed in follow-up.
+### 对已有功能的影响
+- [是/否] — [如是，具体说明]
 ```
 
 ---
 
-## 5. Git Commit & Merge Template
+## 4. 测试报告模板
 
-Used by: Orchestrator (Step 6)
-
-### Pre-Commit Checklist
-```
-- [ ] git status — clean, only expected files modified
-- [ ] git diff — reviewed, no unintended changes
-- [ ] No unrelated files (other features, debug code, personal config)
-- [ ] Docs are synced (all docs listed in Gate 4 checked)
-- [ ] Test report is recorded in test-plan.md
-- [ ] Architecture review is recorded (if applicable)
-```
-
-### Commit Message Format
-```
-<type>: <short description>
-
-<optional body — what and why>
-
-Ref: <task-id-from-task-board>
-```
-
-Types:
-- `feat:` — new feature
-- `fix:` — bug fix
-- `docs:` — documentation only
-- `refactor:` — code change that neither fixes a bug nor adds a feature
-- `test:` — adding or updating tests
-- `chore:` — build process, tooling, config changes
-
-Examples:
-```
-feat: add team creation flow
-
-- Team creation page with name and settings
-- Cloud function to create team and assign admin role
-- Invite code auto-generation
-
-Ref: T-003
-```
+使用者：Tester（第 5 步输出）
 
 ```
-fix: correct weight record date validation
+## 测试报告 — [功能/修复名称]
 
-Allow same-day records, only reject future dates.
+### 测试范围
+- 已测试功能：[列表]
+- 未测试功能：[列表及原因]
+- 回归检查区域：[列表]
+
+### 测试用例
+| ID | 描述 | 预期 | 实际 | 状态 |
+|----|------|------|------|------|
+| TC-001 | [场景] | [预期] | [实际] | PASS/FAIL |
+
+### 发现的 Bug
+| Bug ID | 严重程度 | 描述 | 复现步骤 | 预期 | 实际 |
+|--------|----------|------|----------|------|------|
+| B-001 | P0/P1/P2 | [描述] | [步骤] | [预期] | [实际] |
+
+### 微信开发者工具验证
+- [ ] 编译：成功 / 失败
+- [ ] 页面渲染（iPhone 6/7/8 屏幕）：正常 / 问题
+- [ ] 页面渲染（iPhone X/11/12 屏幕）：正常 / 问题
+- [ ] 控制台：干净 / 警告 / 错误（具体说明）
+- [ ] 网络请求：符合预期 / 异常（具体说明）
+
+### 回归风险评估
+[低 / 中 / 高] — [说明]
+
+### 结论
+**状态**：PASS / FAIL / PASS WITH WARNINGS
+
+**合并建议**：APPROVE / BLOCK
+
+[如 BLOCK]：列出所有阻塞项及负责人。
+[如 PASS WITH WARNINGS]：列出需后续解决的警告。
+```
+
+---
+
+## 5. Git 提交与合并模板
+
+使用者：Orchestrator（第 6 步）
+
+### 提交前检查清单
+```
+- [ ] git status — 干净，仅预期文件有变更
+- [ ] git diff — 已审查，无意外修改
+- [ ] 无无关文件（其他功能、调试代码、个人配置）
+- [ ] 文档已同步（门禁 4 中列出的所有文档已更新）
+- [ ] 测试结果已记录在 test-plan.md
+- [ ] 架构审查已记录（如适用）
+```
+
+### 提交信息格式
+```
+<type>: <简短描述>
+
+<可选正文 — 做了什么、为什么>
+
+Ref: <任务看板任务 ID>
+```
+
+类型：
+- `feat:` — 新功能
+- `fix:` — bug 修复
+- `docs:` — 纯文档变更
+- `refactor:` — 既非修复 bug 也非新增功能的代码改动
+- `test:` — 新增或更新测试
+- `chore:` — 构建流程、工具、配置变更
+
+示例：
+```
+feat: 添加团队创建流程
+
+- 团队创建页面，含名称输入及校验
+- 云函数创建团队并分配管理员角色
+- 邀请码自动生成
+
+Ref: T-002
+```
+
+```
+fix: 修正体重记录日期校验逻辑
+
+允许同日多次记录，仅拒绝未来日期。
 
 Ref: T-012
 ```
 
-### Merge Steps
-1. All quality gates passed (see quality-gates.md)
-2. `git checkout main && git pull origin main` (ensure up to date)
-3. `git merge feature/<name>` (or `git merge fix/<name>`)
-4. Verify merge: `git log --oneline -3`
+### 合并步骤
+1. 所有质量门禁已通过（见 quality-gates.md）
+2. `git checkout main && git pull origin main`（确保最新）
+3. `git merge feature/<名称>`（或 `git merge fix/<名称>`）
+4. 验证合并：`git log --oneline -3`
 5. `git push origin main`
-6. Delete feature branch: `git branch -d feature/<name>`
-7. Update task-board.md: mark merged
+6. 删除功能分支：`git branch -d feature/<名称>`
+7. 更新 task-board.md：标注已合并
 
-### If Merge Conflicts
-1. Resolve conflicts manually
-2. Notify Architect if conflict touches architecture-sensitive files
-3. Re-run Tester on the resolved result if the merge touched business logic
-4. Proceed with merge only after re-verification
+### 合并冲突处理
+1. 手动解决冲突
+2. 若冲突涉及架构敏感文件，通知 Architect
+3. 若合并涉及业务逻辑变更，Tester 需对合并结果重新验证
+4. 重新验证通过后再执行合并
 
 ---
 
-## Cycle Summary Template
+## 周期摘要模板
 
-Used by: Orchestrator (after Step 6)
+使用者：Orchestrator（第 6 步后）
 
 ```
-## Cycle Summary — [Feature Name]
+## 周期摘要 — [功能名称]
 
-### Result
+### 结果
 [DONE / PARTIAL / BLOCKED]
 
-### Changes
-| File | Description |
-|------|-------------|
-| path/to/file | what changed |
+### 变更
+| 文件 | 说明 |
+|------|------|
+| path/to/file | 变更了什么 |
 
-### Task Status
-| Task ID | Status | Notes |
-|---------|--------|-------|
+### 任务状态
+| 任务 ID | 状态 | 备注 |
+|---------|------|------|
 | T-001 | Done | |
 | T-002 | Done | |
 
 ### Git
-- Branch: feature/<name>
-- Commits: [list]
-- Merged to main: [yes / no / pending reason]
+- 分支：feature/<名称>
+- 提交：[列表]
+- 已合并到 main：[是 / 否 / 受阻原因]
 
-### Next Steps
-1. [concrete action] → [agent]
-2. [concrete action] → [agent]
+### 下一步
+1. [具体行动] → [agent]
+2. [具体行动] → [agent]
 ```

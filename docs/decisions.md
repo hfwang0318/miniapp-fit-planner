@@ -1,43 +1,43 @@
-# Architecture Decision Records
+# 架构决策记录
 
-## ADR-001: Native WeChat Mini Program Development
-- **Date**: 2026-05-14
-- **Context**: Need to choose between native WeChat mini program development or cross-platform frameworks (Taro, uni-app).
-- **Decision**: Use native WeChat mini program development.
-- **Rationale**: Native development provides full access to WeChat APIs, simpler debugging, no build toolchain overhead, and the project scope is small enough that cross-platform benefits are unnecessary. WeChat Cloud Development is also designed for native mini programs.
-- **Consequences**: Code cannot be reused on other platforms (web, Alipay), but this is acceptable since we target only WeChat.
+## ADR-001：使用原生微信小程序开发
+- **日期**：2026-05-14
+- **背景**：需要在原生微信小程序开发与跨端框架（Taro、uni-app）之间选择。
+- **决策**：使用原生微信小程序开发。
+- **理由**：原生开发可完整访问微信 API，调试更简单，无构建工具链开销。项目规模足够小，不需要跨端复用。微信云开发本身也专为原生小程序设计。
+- **后果**：代码无法在其他平台（Web、支付宝）复用，但可以接受，因为只面向微信。
 
-## ADR-002: WeChat Cloud Development for Backend
-- **Date**: 2026-05-14
-- **Context**: Need to choose backend infrastructure — WeChat Cloud Development (云开发), CloudBase, or custom Node.js backend.
-- **Decision**: Use WeChat Cloud Development (云开发).
-- **Rationale**: Zero-ops, built-in WeChat authentication (openid), auto-scaling, free tier sufficient for small teams (~4 people). No server management needed. Direct cloud function integration with mini program SDK.
-- **Consequences**: Vendor lock-in to Tencent Cloud ecosystem. Cannot migrate to another cloud provider without rewriting cloud functions.
+## ADR-002：使用微信云开发作为后端
+- **日期**：2026-05-14
+- **背景**：需要选择后端基础设施 — 微信云开发、CloudBase 或自定义 Node.js 后端。
+- **决策**：使用微信云开发。
+- **理由**：零运维，内建微信鉴权（openid），自动扩容，免费额度对小团队（约 4 人）足够。无需管理服务器。云函数直接与小程序 SDK 集成。
+- **后果**：锁定在腾讯云生态。不重写云函数无法迁移到其他云服务商。
 
-## ADR-003: Page-Level State Management with Global Session
-- **Date**: 2026-05-14
-- **Context**: Need to decide on state management approach for the mini program.
-- **Decision**: Use page-level state management with global app data (app.js globalData) for session/user state only. No third-party state management library.
-- **Rationale**: The app has few pages with simple data flow. A global store adds complexity without benefit for MVP. Page-level state keeps components self-contained. If complexity grows post-MVP, consider a minimal observable store pattern.
-- **Consequences**: Page-to-page data sharing requires URL parameters or cloud DB queries. No shared reactivity between pages.
+## ADR-003：页面级状态管理 + 全局会话
+- **日期**：2026-05-14
+- **背景**：需要决定小程序的状态管理方式。
+- **决策**：使用页面级状态管理，仅在 app.js globalData 中保存会话/用户状态。不使用第三方状态管理库。
+- **理由**：应用页面少，数据流简单。引入全局 store 对 MVP 而言增加了不必要的复杂度。页面级状态让组件保持自包含。若后续复杂度增长，可考虑最小化 observable store 模式。
+- **后果**：页面间数据共享需通过 URL 参数或云数据库查询。页面间无共享响应式数据。
 
-## ADR-004: Custom Canvas Chart for Weight Trend
-- **Date**: 2026-05-14
-- **Context**: Need to display weight trend chart without adding heavy dependencies.
-- **Decision**: Build a lightweight custom canvas-based chart (line chart) for weight trend display.
-- **Rationale**: ECharts for mini program adds ~200KB to package size. For a simple line chart showing weight over time, a custom 2D canvas implementation is 5-10KB and sufficient. The chart only needs: line, dots, axis labels, and basic interaction.
-- **Consequences**: More development effort for chart rendering. Limited chart types (only line chart initially). If more chart types are needed post-MVP, consider ECharts.
+## ADR-004：自定义 Canvas 体重趋势图
+- **日期**：2026-05-14
+- **背景**：需要展示体重趋势图，但不引入重型依赖。
+- **决策**：搭建轻量级自定义 Canvas 折线图用于展示体重趋势。
+- **理由**：小程序版 ECharts 增加约 200KB 包体积。对于展示体重随时间变化的简单折线图，自定义 2D Canvas 实现仅需 5-10KB 且功能足够。图表仅需：线条、数据点、坐标轴标签、基础交互。
+- **后果**：图表渲染需更多开发工作量。图表类型受限（初始仅折线图）。若后续需要更多图表类型，可考虑引入 ECharts。
 
-## ADR-005: Two-Role Permission Model
-- **Date**: 2026-05-14
-- **Context**: Need a permission system for team management.
-- **Decision**: Use a simple two-role model: admin and member.
-- **Rationale**: For ~4 person teams, complex RBAC is overengineering. Admin can manage team settings and members. Member can use all basic features. This is sufficient for MVP. Can be extended post-MVP if needed.
-- **Consequences**: No granular permissions (e.g., cannot have "moderator" role). Admin has all management capabilities. If more roles are needed later, the schema is extensible.
+## ADR-005：两角色权限模型
+- **日期**：2026-05-14
+- **背景**：需要团队管理的权限系统。
+- **决策**：使用简单的两角色模型：admin 和 member。
+- **理由**：对于约 4 人团队，复杂 RBAC 属于过度设计。Admin 可以管理团队设置和成员。Member 可使用所有基本功能。MVP 阶段足够。如有需要，schema 可以在后续版本中扩展。
+- **后果**：无细粒度权限（如不能有"moderator"角色）。Admin 拥有所有管理能力。如后续需要更多角色，schema 本身可扩展。
 
-## ADR-006: Privacy-First Weight Data Design
-- **Date**: 2026-05-14
-- **Context**: Weight data is sensitive personal information. Need to decide how to handle visibility.
-- **Decision**: By default, team members see only progress percentage (toward goal), trend direction (up/down arrow), and check-in count. Raw weight values are never exposed unless the member explicitly opts in via privacy settings.
-- **Rationale**: Privacy regulation trends (especially in healthcare/wellness apps) favor data minimization. Users should control their own data visibility. This also reduces compliance risk.
-- **Consequences**: Team progress view shows abstract metrics, which may reduce engagement for some users. Mitigated by allowing opt-in sharing.
+## ADR-006：隐私优先的体重数据设计
+- **日期**：2026-05-14
+- **背景**：体重数据是敏感个人信息。需要决定可见性处理方式。
+- **决策**：默认情况下，团队成员仅看到进度百分比（距目标）、趋势方向（上升/下降箭头）和打卡次数。原始体重值绝不暴露，除非成员在隐私设置中明确授权。
+- **理由**：隐私合规趋势（尤其健康/养生类应用）倾向于数据最小化。用户应该掌控自己的数据可见性。这同时降低了合规风险。
+- **后果**：团队进度视图展示抽象指标，可能降低部分用户的参与感。可通过允许选择性共享来缓解。

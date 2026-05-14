@@ -1,53 +1,53 @@
-# Architecture Design — Fit Planner
+# 架构设计 — Fit Planner
 
-## Technology Stack
-- **Runtime**: WeChat Mini Program (native development)
-- **Backend**: WeChat Cloud Development (cloud functions + cloud database + cloud storage)
-- **State Management**: Page-level state + global app state for user session
-- **Component Library**: Custom components (no third-party library for MVP)
-- **Charts**: Custom lightweight canvas-based chart for weight trend (no ECharts dependency to save package size)
-- **Login**: wx.login() -> cloud function for openid-based authentication
+## 技术栈
+- **运行时**：微信小程序（原生开发）
+- **后端**：微信云开发（云函数 + 云数据库 + 云存储）
+- **状态管理**：页面级状态 + 全局应用状态保存用户会话
+- **组件库**：自定义组件（MVP 阶段不使用第三方库）
+- **图表**：自定义轻量级 Canvas 折线图（不使用 ECharts 以节省包大小）
+- **登录**：wx.login() → 云函数 → 基于 openid 的鉴权
 
-## Layer Architecture
+## 分层架构
 
 ```
-Page Layer (pages/)
+页面层（pages/）
     |
     v
-Service Layer (services/)
+服务层（services/）
     |
     v
-Data Layer (cloud functions + cloud database)
+数据层（云函数 + 云数据库）
 ```
 
-- **Page Layer**: WXML + WXSS + Page JS. Handles UI rendering and user interaction. Calls service layer for business logic. Must NOT directly access cloud database.
-- **Service Layer**: Pure JS modules. Contains all business logic. Orchestrates cloud function calls, validates data, transforms responses. No WXML/WXSS.
-- **Data Layer**: Cloud functions in `cloudfunctions/` and cloud database collections. Cloud functions enforce auth, permission, and data validation server-side.
+- **页面层**：WXML + WXSS + Page JS。负责 UI 渲染和用户交互。调用服务层获取业务逻辑。**禁止**直接访问云数据库。
+- **服务层**：纯 JS 模块。包含所有业务逻辑。编排云函数调用、验证数据、转换响应。不含 WXML/WXSS。
+- **数据层**：`cloudfunctions/` 中的云函数和云数据库集合。云函数在服务端执行鉴权、权限控制、数据验证。
 
-## Page Routes
+## 页面路由
 
-| Path | Name | Description | Auth Required |
-|------|------|-------------|---------------|
-| pages/index/index | Dashboard | Homepage showing team progress, personal stats, quick actions | Yes |
-| pages/login/index | Login | First-run login/onboarding | No |
-| pages/team/index | Team Management | Team creation, join, settings | Yes |
-| pages/weight/index | Weight Recording | Record/edit weight, view history | Yes |
-| pages/profile/index | Profile | User profile, privacy settings, goal settings | Yes |
+| 路径 | 名称 | 描述 | 需要登录 |
+|------|------|------|----------|
+| pages/dashboard/index | 仪表盘 | 首页 — 团队进度、个人统计、快捷操作 | 是 |
+| pages/login/index | 登录 | 首次登录引导 | 否 |
+| pages/team/index | 团队管理 | 创建团队、加入团队、团队设置 | 是 |
+| pages/weight/index | 体重记录 | 记录/编辑体重、查看历史 | 是 |
+| pages/profile/index | 个人资料 | 用户资料、隐私设置、目标设置 | 是 |
 
-## State Management
-- **Global state** (app.js globalData): user session (openid, logged-in status), current team ID
-- **Page-level state**: UI state specific to each page (form inputs, loading states, local data)
-- No third-party state management library for MVP. If needed later, consider a minimal store pattern.
+## 状态管理
+- **全局状态**（app.js globalData）：用户会话（openid、登录状态）、当前团队 ID
+- **页面级状态**：各页面的 UI 状态（表单输入、加载状态、本地数据）
+- MVP 阶段不使用第三方状态管理库。如后续需要，可考虑最小化 store 模式。
 
-## Data Flow
+## 数据流
 
-1. User interacts with Page -> Page calls Service function
-2. Service function validates input, calls Cloud Function
-3. Cloud Function authenticates (verifies openid), authorizes (checks permissions), validates data, interacts with Cloud Database
-4. Cloud Function returns result to Service
-5. Service transforms data, returns to Page
-6. Page updates WXML data binding -> UI updates
+1. 用户与页面交互 → 页面调用服务函数
+2. 服务函数验证输入，调用云函数
+3. 云函数鉴权（验证 openid）、授权（检查权限）、验证数据，与云数据库交互
+4. 云函数将结果返回服务层
+5. 服务层转换数据，返回页面
+6. 页面更新 WXML 数据绑定 → UI 更新
 
-## Subpackage Strategy
-- MVP: Single main package (all pages in main package, <2MB)
-- If needed post-MVP: Split into subpackages by feature area (team, weight, profile)
+## 分包策略
+- MVP：单主包（所有页面在主包中，<2MB）
+- 后续如有需要：按功能区域拆分为分包（team、weight、profile）
