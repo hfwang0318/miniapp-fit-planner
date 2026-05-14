@@ -1,0 +1,6 @@
+<view class="chart-wrapper" style="height: {{height}}rpx;">
+  <canvas type="2d" id="chartCanvas" class="chart-canvas" hidden="{{records.length === 0}}"></canvas>
+  <view hidden="{{records.length > 0}}" class="chart-empty">
+    <text class="text-muted">暂无数据</text>
+  </view>
+</view>

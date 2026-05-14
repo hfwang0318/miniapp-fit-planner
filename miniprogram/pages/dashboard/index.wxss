@@ -1,0 +1,98 @@
+/* Dashboard page styles */
+
+.greeting-section {
+  padding: 32rpx 0 24rpx;
+}
+
+.greeting-text {
+  display: block;
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #333333;
+  margin-bottom: 8rpx;
+}
+
+.greeting-sub {
+  display: block;
+  font-size: 26rpx;
+}
+
+.stats-row {
+  display: flex;
+  flex-direction: row;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.stat-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 12rpx;
+  margin-bottom: 0;
+}
+
+.stat-card-label {
+  font-size: 22rpx;
+  color: #999999;
+  margin-bottom: 8rpx;
+}
+
+.stat-card-value {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #333333;
+}
+
+.trend-up {
+  color: #EE0A24;
+}
+
+.trend-down {
+  color: #07C160;
+}
+
+.trend-stable {
+  color: #999999;
+}
+
+.chart-section {
+  margin-bottom: 24rpx;
+}
+
+.section-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 16rpx;
+}
+
+.cta-section {
+  margin-bottom: 32rpx;
+}
+
+.recent-section {
+  margin-bottom: 24rpx;
+}
+
+.record-item {
+  margin-bottom: 16rpx;
+}
+
+.record-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.record-weight {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.record-date {
+  font-size: 24rpx;
+  margin-top: 4rpx;
+}

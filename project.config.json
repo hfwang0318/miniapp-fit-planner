@@ -45,7 +45,7 @@
     "disableSWC": true
   },
   "appid": "wx4bd5c59691312470",
-  "projectname": "quickstart-wx-cloud",
+  "projectname": "fit-planner",
   "libVersion": "2.20.1",
   "cloudfunctionTemplateRoot": "cloudfunctionTemplate/",
   "condition": {
@@ -62,13 +62,7 @@
       "list": []
     },
     "miniprogram": {
-      "list": [
-        {
-          "id": -1,
-          "name": "db guide",
-          "pathName": "pages/databaseGuide/databaseGuide"
-        }
-      ]
+      "list": []
     }
   },
   "compileType": "miniprogram",

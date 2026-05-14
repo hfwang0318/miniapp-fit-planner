@@ -1,0 +1,67 @@
+<view class="page-container">
+  <!-- Greeting -->
+  <view class="greeting-section">
+    <text class="greeting-text">欢迎回来</text>
+    <text class="greeting-sub text-muted">Fit Planner</text>
+  </view>
+
+  <!-- Stats Cards (no records yet) -->
+  <view wx:if="{{records.length > 0}}" class="stats-row">
+    <view class="card stat-card">
+      <text class="stat-card-label">总记录</text>
+      <text class="stat-card-value">{{recordCount}}</text>
+    </view>
+    <view class="card stat-card">
+      <text class="stat-card-label">最新体重</text>
+      <text class="stat-card-value">{{latestFormatted}}</text>
+    </view>
+    <view class="card stat-card">
+      <text class="stat-card-label">趋势</text>
+      <text class="stat-card-value trend-{{trend}}">{{trendSymbol}} {{trendDelta > 0 ? trendDelta : ''}}</text>
+    </view>
+  </view>
+
+  <!-- Weight Chart -->
+  <view wx:if="{{records.length >= 2}}" class="chart-section">
+    <text class="section-title">体重趋势</text>
+    <weight-chart records="{{records}}" height="300"></weight-chart>
+  </view>
+
+  <!-- CTA Button -->
+  <view class="cta-section">
+    <button class="btn-primary" bindtap="onRecordWeightTap">
+      {{records.length > 0 ? '记录体重' : '开始记录体重'}}
+    </button>
+  </view>
+
+  <!-- Recent Entries -->
+  <view wx:if="{{recentEntries.length > 0}}" class="recent-section">
+    <text class="section-title">最近记录</text>
+    <view
+      class="card record-item"
+      wx:for="{{recentEntries}}"
+      wx:key="recordId"
+      data-recordid="{{item.recordId}}"
+      bindtap="onRecordWeightTap"
+    >
+      <view class="flex-between">
+        <view class="record-info">
+          <text class="record-weight">{{item._formattedWeight}}</text>
+          <text class="text-muted record-date">{{item.recordedAt}}</text>
+        </view>
+        <text class="text-muted">查看全部 →</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Empty State -->
+  <view wx:if="{{records.length === 0 && !loading}}" class="empty-state">
+    <text>还没有体重记录</text>
+    <text class="text-muted">点击上方按钮开始记录你的第一个数据吧！</text>
+  </view>
+
+  <!-- Loading -->
+  <view wx:if="{{loading}}" class="loading-overlay">
+    <text class="text-muted">加载中...</text>
+  </view>
+</view>

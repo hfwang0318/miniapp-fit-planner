@@ -1,19 +1,60 @@
-// app.js
 App({
-  onLaunch: function () {
-    this.globalData = {
-      // env 参数说明：
-      // env 参数决定接下来小程序发起的云开发调用（wx.cloud.xxx）会请求到哪个云环境的资源
-      // 此处请填入环境 ID, 环境 ID 可在微信开发者工具右上顶部工具栏点击云开发按钮打开获取
-      env: "cloud1-d5gl9zvald3fd7fab",
-    };
+  globalData: {
+    user: null,
+    isLoggedIn: false
+  },
+
+  onLaunch() {
     if (!wx.cloud) {
-      console.error("请使用 2.2.3 或以上的基础库以使用云能力");
-    } else {
-      wx.cloud.init({
-        env: this.globalData.env,
-        traceUser: true,
-      });
+      console.error('Please upgrade WeChat base library to 2.2.3 or above');
+      return;
+    }
+    wx.cloud.init({
+      env: 'cloud1-d5gl9zvald3fd7fab',
+      traceUser: true
+    });
+    this.restoreSession();
+  },
+
+  /**
+   * Restore user session from local storage.
+   */
+  restoreSession() {
+    try {
+      const saved = wx.getStorageSync('fit_user_session');
+      if (saved && saved.openid) {
+        this.globalData.user = saved;
+        this.globalData.isLoggedIn = true;
+      }
+    } catch (e) {
+      // Session storage unavailable — user will need to login again
     }
   },
+
+  /**
+   * Set user session data after successful login.
+   * @param {Object} userData - { openid, nickName?, avatarUrl? }
+   */
+  setUserSession(userData) {
+    this.globalData.user = userData;
+    this.globalData.isLoggedIn = true;
+    try {
+      wx.setStorageSync('fit_user_session', userData);
+    } catch (e) {
+      // Storage full or unavailable — session is still valid in memory
+    }
+  },
+
+  /**
+   * Clear user session on logout.
+   */
+  clearUserSession() {
+    this.globalData.user = null;
+    this.globalData.isLoggedIn = false;
+    try {
+      wx.removeStorageSync('fit_user_session');
+    } catch (e) {
+      // Ignore storage errors
+    }
+  }
 });

@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "Fit Planner",
+  "usingComponents": {
+    "weight-chart": "/components/weight-chart/index"
+  }
+}

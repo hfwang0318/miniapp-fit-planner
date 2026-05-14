@@ -1,0 +1,80 @@
+// Weight management constants
+
+const UNITS = {
+  KG: 'kg',
+  LB: 'lb'
+};
+
+const WEIGHT_LIMITS = {
+  MIN: 20,   // kg
+  MAX: 500   // kg
+};
+
+const NOTE_LIMITS = {
+  MAX_LENGTH: 200
+};
+
+const CHECKIN_NOTE_LIMITS = {
+  MAX_LENGTH: 500
+};
+
+const PAGINATION = {
+  PAGE_SIZE: 20
+};
+
+const STORAGE_KEYS = {
+  USER_SESSION: 'fit_user_session'
+};
+
+const INVITE_CODE = {
+  LENGTH: 6,
+  EXPIRE_DAYS: 7,
+  MAX_USES: 10
+};
+
+const ERROR_CODES = {
+  INVALID_WEIGHT: 'INVALID_WEIGHT',
+  FUTURE_DATE: 'FUTURE_DATE',
+  INVALID_DATE: 'INVALID_DATE',
+  NOT_FOUND: 'NOT_FOUND',
+  NOT_OWNER: 'NOT_OWNER',
+  UNAUTHORIZED: 'UNAUTHORIZED',
+  INVALID_NAME: 'INVALID_NAME',
+  INVALID_CODE: 'INVALID_CODE',
+  EXPIRED_CODE: 'EXPIRED_CODE',
+  CODE_FULL: 'CODE_FULL',
+  ALREADY_MEMBER: 'ALREADY_MEMBER',
+  NOT_MEMBER: 'NOT_MEMBER',
+  DUPLICATE: 'DUPLICATE',
+  AUTH_FAILED: 'AUTH_FAILED'
+};
+
+const ERROR_MESSAGES = {
+  INVALID_WEIGHT: '请输入有效体重（20-500 kg）',
+  FUTURE_DATE: '不能记录未来的日期',
+  INVALID_DATE: '请输入有效日期',
+  NOT_FOUND: '记录不存在',
+  NOT_OWNER: '无权操作此记录',
+  UNAUTHORIZED: '请先登录',
+  AUTH_FAILED: '登录失败，请重试',
+  NETWORK_ERROR: '网络不可用，请检查网络后重试',
+  INVALID_NAME: '团队名称不能为空',
+  INVALID_CODE: '邀请码无效',
+  EXPIRED_CODE: '邀请码已过期',
+  CODE_FULL: '邀请码已用完',
+  ALREADY_MEMBER: '你已经是团队成员',
+  NOT_MEMBER: '你不是团队成员',
+  DUPLICATE: '今天已经打卡过'
+};
+
+module.exports = {
+  UNITS,
+  WEIGHT_LIMITS,
+  NOTE_LIMITS,
+  CHECKIN_NOTE_LIMITS,
+  PAGINATION,
+  STORAGE_KEYS,
+  INVITE_CODE,
+  ERROR_CODES,
+  ERROR_MESSAGES
+};

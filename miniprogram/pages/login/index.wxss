@@ -1,0 +1,38 @@
+.login-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 0 48rpx;
+  box-sizing: border-box;
+  background-color: #FFFFFF;
+}
+
+.status-bar-spacer {
+  padding-top: calc(88rpx + constant(safe-area-inset-top));
+  padding-top: calc(88rpx + env(safe-area-inset-top));
+}
+
+.brand-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+  padding-bottom: 120rpx;
+}
+
+.brand-name {
+  font-size: 56rpx;
+  font-weight: 700;
+  color: #07C160;
+  margin-bottom: 16rpx;
+}
+
+.brand-desc {
+  font-size: 28rpx;
+  color: #999999;
+}
+
+.login-btn-area {
+  padding-bottom: 48rpx;
+}

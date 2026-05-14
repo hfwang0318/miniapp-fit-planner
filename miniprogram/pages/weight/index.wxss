@@ -1,0 +1,149 @@
+/* Weight page styles */
+
+.stats-card {
+  margin-bottom: 24rpx;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #999999;
+  margin-bottom: 8rpx;
+}
+
+.stat-value {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.form-toggle-area {
+  margin-bottom: 24rpx;
+}
+
+.form-section {
+  margin-bottom: 24rpx;
+}
+
+.form-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 32rpx;
+}
+
+.form-group {
+  margin-bottom: 28rpx;
+}
+
+.form-label {
+  display: block;
+  font-size: 26rpx;
+  color: #666666;
+  margin-bottom: 12rpx;
+}
+
+.form-input {
+  width: 100%;
+  height: 72rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  border: 2rpx solid #E5E5E5;
+  border-radius: 8rpx;
+  box-sizing: border-box;
+  background-color: #FAFAFA;
+}
+
+.picker-value {
+  width: 100%;
+  height: 72rpx;
+  line-height: 72rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  border: 2rpx solid #E5E5E5;
+  border-radius: 8rpx;
+  box-sizing: border-box;
+  background-color: #FAFAFA;
+  color: #333333;
+}
+
+.form-textarea {
+  width: 100%;
+  min-height: 140rpx;
+  padding: 16rpx 20rpx;
+  font-size: 28rpx;
+  border: 2rpx solid #E5E5E5;
+  border-radius: 8rpx;
+  box-sizing: border-box;
+  background-color: #FAFAFA;
+}
+
+.char-count {
+  display: block;
+  text-align: right;
+  margin-top: 8rpx;
+}
+
+.form-actions {
+  margin-top: 32rpx;
+}
+
+.section-title {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 16rpx;
+}
+
+.record-item {
+  margin-bottom: 16rpx;
+}
+
+.record-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.record-weight {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.record-date {
+  font-size: 24rpx;
+  margin-top: 4rpx;
+}
+
+.record-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 12rpx;
+}
+
+.btn-edit {
+  padding: 8rpx 20rpx;
+  font-size: 24rpx;
+  border-radius: 8rpx;
+  background-color: #F0F0F0;
+  color: #333333;
+  border: none;
+}
+
+.record-note {
+  margin-top: 12rpx;
+  padding-top: 12rpx;
+  border-top: 1rpx solid #F0F0F0;
+}
+
+.history-section {
+  margin-top: 8rpx;
+}

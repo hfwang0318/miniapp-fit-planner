@@ -1,0 +1,23 @@
+<view class="login-page safe-area-bottom">
+  <!-- Custom navigation spacer -->
+  <view class="status-bar-spacer"></view>
+
+  <!-- Branding area -->
+  <view class="brand-area">
+    <text class="brand-name">Fit Planner</text>
+    <text class="brand-desc">团队协作体重管理</text>
+  </view>
+
+  <!-- Login button area -->
+  <view class="login-btn-area">
+    <button
+      class="btn-primary"
+      loading="{{loading}}"
+      disabled="{{loading}}"
+      bindtap="onLoginTap"
+    >
+      <text wx:if="{{loading}}">登录中...</text>
+      <text wx:else>微信一键登录</text>
+    </button>
+  </view>
+</view>

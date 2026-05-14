@@ -1,0 +1,143 @@
+<view class="page-container">
+  <!-- Quick Stats Card -->
+  <view class="card stats-card" wx:if="{{records.length > 0}}">
+    <view class="flex-between">
+      <view class="stat-item">
+        <text class="stat-label">总记录</text>
+        <text class="stat-value">{{recordCount}}</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">最新体重</text>
+        <text class="stat-value">{{latestFormatted}}</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">趋势</text>
+        <text class="stat-value">
+          <text wx:if="{{trend === 'down'}}">↓</text>
+          <text wx:elif="{{trend === 'up'}}">↑</text>
+          <text wx:else>→</text>
+        </text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Toggle Form Button -->
+  <view class="form-toggle-area">
+    <button
+      class="btn-primary"
+      bindtap="onToggleForm"
+    >
+      {{showForm ? '取消' : '记录体重'}}
+    </button>
+  </view>
+
+  <!-- Form Section -->
+  <view class="card form-section" wx:if="{{showForm}}">
+    <text class="form-title">{{editingId ? '编辑体重记录' : '新增体重记录'}}</text>
+
+    <!-- Weight Input -->
+    <view class="form-group">
+      <text class="form-label">体重</text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="请输入体重数值"
+        value="{{form.weight}}"
+        bindinput="onWeightInput"
+      />
+    </view>
+
+    <!-- Unit Picker -->
+    <view class="form-group">
+      <text class="form-label">单位</text>
+      <picker
+        value="{{form.unit === 'kg' ? 0 : 1}}"
+        range="{{['kg', 'lb']}}"
+        bindchange="onUnitChange"
+      >
+        <view class="picker-value">{{form.unit}}</view>
+      </picker>
+    </view>
+
+    <!-- Date Picker -->
+    <view class="form-group">
+      <text class="form-label">日期</text>
+      <picker
+        mode="date"
+        value="{{form.recordedAt}}"
+        end="{{maxDate}}"
+        bindchange="onDateChange"
+      >
+        <view class="picker-value">{{form.recordedAt}}</view>
+      </picker>
+    </view>
+
+    <!-- Note Textarea -->
+    <view class="form-group">
+      <text class="form-label">备注</text>
+      <textarea
+        class="form-textarea"
+        placeholder="可选，最多200字"
+        value="{{form.note}}"
+        maxlength="200"
+        bindinput="onNoteInput"
+      />
+      <text class="text-muted char-count">{{form.note.length || 0}}/200</text>
+    </view>
+
+    <!-- Submit/Cancel Buttons -->
+    <view class="form-actions">
+      <button
+        class="btn-primary"
+        disabled="{{submitting}}"
+        loading="{{submitting}}"
+        bindtap="onSubmit"
+      >
+        {{submitting ? '保存中...' : (editingId ? '更新' : '保存')}}
+      </button>
+    </view>
+  </view>
+
+  <!-- History List -->
+  <view class="history-section" wx:if="{{records.length > 0}}">
+    <text class="section-title">记录历史</text>
+    <view
+      class="card record-item"
+      wx:for="{{records}}"
+      wx:key="recordId"
+    >
+      <view class="flex-between">
+        <view class="record-info">
+          <text class="record-weight">{{item._formattedWeight}}</text>
+          <text class="text-muted record-date">{{item.recordedAt}}</text>
+        </view>
+        <view class="record-actions">
+          <button
+            class="btn-small btn-edit"
+            data-recordid="{{item.recordId}}"
+            bindtap="onEditTap"
+          >编辑</button>
+          <button
+            class="btn-small btn-danger"
+            data-recordid="{{item.recordId}}"
+            bindtap="onDeleteTap"
+          >删除</button>
+        </view>
+      </view>
+      <view wx:if="{{item.note}}" class="record-note">
+        <text class="text-muted">{{item.note}}</text>
+      </view>
+    </view>
+
+    <!-- Load more -->
+    <view class="loading-overlay" wx:if="{{loading}}">
+      <text class="text-muted">加载中...</text>
+    </view>
+  </view>
+
+  <!-- Empty State -->
+  <view class="empty-state" wx:if="{{records.length === 0 && !loading}}">
+    <text>还没有体重记录</text>
+    <text class="text-muted">开始记录吧！</text>
+  </view>
+</view>
