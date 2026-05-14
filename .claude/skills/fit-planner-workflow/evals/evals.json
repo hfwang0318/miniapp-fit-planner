@@ -1,0 +1,23 @@
+{
+  "skill_name": "fit-planner-workflow",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我刚 clone 了这个 fit-planner 项目，现在想开始开发。帮我初始化项目的开发环境和文档结构。",
+      "expected_output": "Skill triggers initialization workflow: checks git status, creates docs/ directory with all foundation files (product-requirements.md, feature-list.md, task-board.md, architecture.md, data-model.md, api-contract.md, test-plan.md, decisions.md, changelog.md, git-workflow.md), updates README.md, evaluates technology choices, creates MVP plan, and outputs next recommended task (user login).",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "我想添加团队创建功能。用户应该能创建团队、设置团队名称，创建后自动成为管理员。请帮我实现。",
+      "expected_output": "Skill triggers the 6-step workflow: Orchestrator analyzes requirement, splits into tasks, updates docs. Architect designs or confirms no architecture change needed. Developer implements on feature/team-creation branch. Architect reviews code. Tester tests. Orchestrator wraps up with commit and merge. Each step follows the templates in workflow-templates.md. Privacy check confirms no weight data exposure in team creation.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "recordWeight 云函数有个 bug：当用户在同一天记录两次体重时，第二次记录会覆盖第一次，而不是创建新的记录。帮我修复。",
+      "expected_output": "Orchestrator analyzes the bug, classifies as P0/P1, creates fix task. Developer creates fix/duplicate-weight-record branch, fixes the cloud function to allow multiple same-day records (change upsert to insert logic). Architect reviews for data integrity. Tester verifies the fix with test cases (same day, different days, edge cases). Privacy check confirms no weight data leak. Merge to main.",
+      "files": []
+    }
+  ]
+}
