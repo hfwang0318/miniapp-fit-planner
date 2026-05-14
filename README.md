@@ -49,7 +49,7 @@ docs/              # Project documentation
 1. **Open in WeChat DevTools**
    - Open WeChat DevTools
    - Import project from this directory
-   - Use AppID: `wx4bd5c59691312470`
+   - Use AppID
 
 2. **Configure Cloud Environment**
    - Create a cloud development environment in WeChat DevTools
