@@ -18,8 +18,10 @@ const authService = {
    */
   async login() {
     try {
-      // WeChat Cloud Development resolves identity via cloud.getWXContext() automatically.
-      // The wx.login() call establishes the client session, but we don't need to pass the code.
+      // Step 1: Establish WeChat client session (required for cloud.getWXContext().OPENID)
+      await wx.login();
+
+      // Step 2: Call auth cloud function (identity resolved server-side via cloud.getWXContext())
       const result = await wx.cloud.callFunction({
         name: 'auth',
         data: { type: 'login' }
