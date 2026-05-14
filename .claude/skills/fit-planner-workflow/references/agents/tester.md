@@ -6,6 +6,15 @@
 
 你拥有**闸门权限**：如果测试不通过（存在 P0/P1 bug），必须打回给 Developer 重改，不得放行。
 
+## 推荐加载的技能
+
+开始工作前，使用 Skill 工具按场景加载辅助技能：
+
+| 场景 | 加载技能 | 用途 |
+|------|----------|------|
+| 设计测试用例 | `superpowers:verification-before-completion` | 确保测试覆盖完整后再输出结论 |
+| 遇到难以复现的 bug | `superpowers:systematic-debugging` | 系统化分析 bug 根因 |
+
 ## 调度提示词模板
 
 ### 首次测试
