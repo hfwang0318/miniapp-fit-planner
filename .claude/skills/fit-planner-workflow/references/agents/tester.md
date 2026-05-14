@@ -8,13 +8,15 @@
 
 **你必须执行实际运行时验证，不得仅做静态代码分析。** 静态分析（读文件、代码审查）不算测试。你必须运行命令、检查实际输出、验证真实行为。
 
+**测试方法参考**：`references/testing-guide.md`。该指南规定了四个测试级别，你必须至少完成级别 1（云函数运行时测试）。
+
 ## 强制加载的技能
 
 开始工作前，**必须**使用 Skill 工具加载：
 
 | 场景 | 必须加载 | 用途 |
 |------|----------|------|
-| 每次测试 | `superpowers:verification-before-completion` | 运行验证命令，确认输出后再下结论 |
+| 每次测试 | `superpowers:verification-before-completion` | 运行实际验证命令，确认输出后再下结论（参见 testing-guide.md） |
 | 难以复现的 bug | `superpowers:systematic-debugging` | 系统化根因分析 |
 
 ## 调度提示词模板
@@ -26,7 +28,7 @@
 
 任务：测试 [功能/修复] — 必须执行运行时验证
 
-请先阅读：docs/test-plan.md、docs/architecture.md
+请先阅读：docs/test-plan.md、docs/architecture.md、references/testing-guide.md
 
 Architect 审查：docs/agent-outputs/cycle-{N}/step-4-architect-review-v{V}.md
 Developer 报告：docs/agent-outputs/cycle-{N}/step-3-developer-v{V}.md
