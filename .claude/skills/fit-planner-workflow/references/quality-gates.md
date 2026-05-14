@@ -38,6 +38,8 @@
 - [ ] feature-list.md 反映当前状态
 - [ ] task-board.md 已更新
 - [ ] changelog.md 有本轮变更条目
+- [ ] cycle-log.md 已更新（本轮所有 agent 输出文件已索引）
+- [ ] agent-outputs/ 目录下 6 个步骤的输出文件均已就位
 - [ ] 如有项目级别变更，README.md 已更新
 - [ ] 如设计变更，architecture.md 已更新
 - [ ] 如 schema 变更，data-model.md 已更新

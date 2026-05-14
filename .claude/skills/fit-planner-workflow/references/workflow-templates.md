@@ -12,6 +12,7 @@
 ## 1. 需求处理模板
 
 使用者：Orchestrator（第 1 步）
+**输出文件**：`docs/agent-outputs/cycle-{N}-step-1-orchestrator.md`
 
 ```
 ## 需求分析 — [功能名称]
@@ -36,13 +37,45 @@
 
 ### 下一步
 Architect 设计（第 2 步）— 调度 Architect agent
+传递信息：本输出文件 + 任务描述
 ```
 
 ---
 
-## 2. 架构审查模板
+## 2. 架构设计模板
+
+使用者：Architect（第 2 步）
+**输出文件**：`docs/agent-outputs/cycle-{N}-step-2-architect-design.md`
+
+```
+## 架构设计 — [功能/修复名称]
+
+### 架构影响评估
+- 是否影响架构：[是 / 否]
+- 影响范围：[如影响，列出受影响的部分]
+
+### 实现约束
+1. [约束 1：允许的依赖、模块边界]
+2. [约束 2：数据模型规则]
+3. [约束 3：其他注意事项]
+
+### 已更新文档
+- [ ] architecture.md
+- [ ] data-model.md
+- [ ] api-contract.md
+- [ ] decisions.md
+
+### 下一步
+Developer 实现（第 3 步）— 调度 Developer agent
+传递信息：本输出文件 + 实现约束清单
+```
+
+---
+
+## 3. 架构审查模板
 
 使用者：Architect（第 4 步）
+**输出文件**：`docs/agent-outputs/cycle-{N}-step-4-architect-review.md`
 
 ```
 ## 架构审查 — [功能/修复名称]
@@ -89,14 +122,19 @@ Architect 设计（第 2 步）— 调度 Architect agent
 - 需要修改：
   1. [具体修改指引]
   2. [具体修改指引]
-- 退回 Developer 修复
+- 退回 Developer 修复（第 3 步）
+
+[如通过]：
+- 下一步：Tester 验证（第 5 步）
+- 传递信息：本输出文件 + 审查结论
 ```
 
 ---
 
-## 3. 开发完成报告模板
+## 4. 开发完成报告模板
 
-使用者：Developer（第 3 步输出）
+使用者：Developer（第 3 步）
+**输出文件**：`docs/agent-outputs/cycle-{N}-step-3-developer.md`
 
 ```
 ## 开发报告 — [功能/修复名称]
@@ -137,9 +175,10 @@ Architect 设计（第 2 步）— 调度 Architect agent
 
 ---
 
-## 4. 测试报告模板
+## 5. 测试报告模板
 
-使用者：Tester（第 5 步输出）
+使用者：Tester（第 5 步）
+**输出文件**：`docs/agent-outputs/cycle-{N}-step-5-tester.md`
 
 ```
 ## 测试报告 — [功能/修复名称]
@@ -180,7 +219,7 @@ Architect 设计（第 2 步）— 调度 Architect agent
 
 ---
 
-## 5. Git 提交与合并模板
+## 6. Git 提交与合并模板
 
 使用者：Orchestrator（第 6 步）
 
@@ -247,15 +286,26 @@ Ref: T-012
 
 ---
 
-## 周期摘要模板
+## 7. 周期摘要模板
 
-使用者：Orchestrator（第 6 步后）
+使用者：Orchestrator（第 6 步）
+**输出文件**：`docs/agent-outputs/cycle-{N}-step-6-orchestrator.md`
 
 ```
 ## 周期摘要 — [功能名称]
 
 ### 结果
 [DONE / PARTIAL / BLOCKED]
+
+### 各步骤回顾
+| 步骤 | Agent | 输出文件 | 结论 |
+|------|-------|----------|------|
+| 1 | Orchestrator | [文件] | — |
+| 2 | Architect | [文件] | 通过/需变更 |
+| 3 | Developer | [文件] | 完成 |
+| 4 | Architect | [文件] | APPROVED/REQUESTED |
+| 5 | Tester | [文件] | PASS/FAIL/WARNINGS |
+| 6 | Orchestrator | 本文件 | DONE/BLOCKED |
 
 ### 变更
 | 文件 | 说明 |

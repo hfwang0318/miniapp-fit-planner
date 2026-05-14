@@ -190,6 +190,104 @@ description: >
 - `docs/git-workflow.md` — Git 工作流规则
 - `README.md` — 项目说明
 
+## Agent 信息传递协议
+
+所有 agent 之间的信息传递**必须**通过文件记录，做到可观测、可追溯。不得仅依赖对话上下文传递关键信息。
+
+### 输出目录
+
+每个 agent 的输出必须写入 `docs/agent-outputs/` 目录。命名规范：
+
+```
+docs/agent-outputs/cycle-{N}-step-{S}-{角色}.md
+```
+
+| 步骤 | 角色 | 文件名示例 |
+|------|------|-----------|
+| 第 1 步 | Orchestrator | `cycle-1-step-1-orchestrator.md` |
+| 第 2 步 | Architect（设计） | `cycle-1-step-2-architect-design.md` |
+| 第 3 步 | Developer | `cycle-1-step-3-developer.md` |
+| 第 4 步 | Architect（审查） | `cycle-1-step-4-architect-review.md` |
+| 第 5 步 | Tester | `cycle-1-step-5-tester.md` |
+| 第 6 步 | Orchestrator | `cycle-1-step-6-orchestrator.md` |
+
+### 每步文件内容要求
+
+**第 1 步 — Orchestrator 需求分析输出文件**：
+- 需求分析摘要（用户意图、可行性评估）
+- 任务拆分表
+- 下一步 agent（谁、做什么）
+
+**第 2 步 — Architect 设计输出文件**：
+- 架构影响评估（是否影响架构）
+- 实现约束清单
+- 已更新的架构文档列表
+- 下一步交接信息
+
+**第 3 步 — Developer 实现输出文件**（即开发完成报告）：
+- 使用 `references/workflow-templates.md` 中的开发完成报告模板
+- 必须列出所有修改文件及其变更说明
+
+**第 4 步 — Architect 审查输出文件**（即架构审查报告）：
+- 使用 `references/workflow-templates.md` 中的架构审查模板
+- 必须明确给出 APPROVED / CHANGES REQUESTED / BLOCKED
+
+**第 5 步 — Tester 测试输出文件**（即测试报告）：
+- 使用 `references/workflow-templates.md` 中的测试报告模板
+- 必须明确给出合并建议
+
+**第 6 步 — Orchestrator 收尾输出文件**（即周期摘要）：
+- 使用 `references/workflow-templates.md` 中的周期摘要模板
+- 汇总所有 agent 的输出结论
+
+### 传递链
+
+```
+Orchestrator 第 1 步输出
+  → 告诉 Architect 要设计/评估什么
+
+Architect 第 2 步输出（约束清单）
+  → 告诉 Developer 要遵循什么约束
+
+Developer 第 3 步输出（完成报告）
+  → 告诉 Architect 审查什么代码
+
+Architect 第 4 步输出（审查结论）
+  → 告诉 Tester 代码是否通过、关注哪些点
+
+Tester 第 5 步输出（测试结论）
+  → 告诉 Orchestrator 是否可以合并
+
+Orchestrator 第 6 步输出（周期摘要）
+  → 本轮关闭，归档
+```
+
+### 周期日志
+
+`docs/cycle-log.md` 作为总索引文件，记录每轮开发周期的概览信息：
+
+```markdown
+## 周期 N — [功能/修复名称] — 2026-XX-XX
+
+| 步骤 | Agent | 结果 | 输出文件 |
+|------|-------|------|----------|
+| 1 | Orchestrator | 通过 | [文件] |
+| 2 | Architect | 通过/需修改 | [文件] |
+| 3 | Developer | 完成 | [文件] |
+| 4 | Architect | APPROVED/REQUESTED | [文件] |
+| 5 | Tester | PASS/FAIL/.. | [文件] |
+| 6 | Orchestrator | DONE/BLOCKED | [文件] |
+
+**提交**：`<commit-hash>` — `<简要描述>`
+```
+
+### 调度时必须执行的步骤
+
+1. **调度前**：创建该 agent 输出文件的空占位（或明确告知 agent 该写到哪里）
+2. **提示词中**：始终包含"将你的输出写入 `docs/agent-outputs/cycle-N-step-S-role.md`"
+3. **接收后**：读取该文件确认内容完整，然后将文件名和结论追加到 `docs/cycle-log.md`
+4. **下一 agent 调度前**：在提示词中引用前一 agent 的输出文件路径
+
 ## 输出风格
 
 执行导向：

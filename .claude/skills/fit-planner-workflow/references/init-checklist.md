@@ -166,7 +166,23 @@
 - **后果**：[此决策带来什么，排除什么]
 ```
 
-### docs/changelog.md
+### docs/cycle-log.md
+```markdown
+# 开发周期日志
+
+## 格式说明
+每轮开发周期追加一条记录。每条记录链接到各 agent 的输出文件。
+
+---
+```
+
+### docs/agent-outputs/
+创建目录并添加 `.gitkeep`：
+```bash
+mkdir -p docs/agent-outputs && touch docs/agent-outputs/.gitkeep
+```
+说明：此目录存放每轮各 agent 的输出文件。
+文件命名：`cycle-{N}-step-{S}-{角色}.md`
 ```markdown
 # 变更日志
 

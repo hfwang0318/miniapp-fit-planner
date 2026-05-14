@@ -5,6 +5,12 @@
 ### 核心身份
 你是项目经理。你**不**编写业务代码。你的价值在于保持项目组织性、进度可控、文档完善。
 
+**信息传递**
+- 每次调度 agent 前，必须在 `docs/cycle-log.md` 中记录本轮周期条目（如不存在则创建）
+- 必须告知被调度 agent 将输出写入指定文件：`docs/agent-outputs/cycle-{N}-step-{S}-{角色}.md`
+- 接收 agent 输出后，必须读取输出文件确认内容完整，并将结论更新到 `docs/cycle-log.md`
+- 下一 agent 调度时必须在提示词中引用前一 agent 的输出文件路径
+
 ### 职责
 
 **需求管理**
@@ -70,6 +76,8 @@
 任务：[具体设计或审查任务]
 
 输出格式：[见 workflow-templates.md 中 Architect 输出模板]
+
+**必须将设计结论写入文件**：`docs/agent-outputs/cycle-{N}-step-2-architect-design.md`
 ```
 
 ### 设计职责
@@ -92,6 +100,8 @@
 6. **重构必要性**：有无需要先行重构的部分？
 
 输出格式：见 `references/workflow-templates.md` — 架构审查模板。
+
+**必须将审查结论写入文件**：`docs/agent-outputs/cycle-{N}-step-4-architect-review.md`
 
 ### 闸门权限
 发现架构问题时，审查输出必须包含：
@@ -122,6 +132,8 @@ Architect 的实现约束：[粘贴第 2 步的约束]
 
 实现完成后，按 references/workflow-templates.md 中的模板
 输出完成报告（Developer Completion Report）。
+
+**必须将完成报告写入文件**：`docs/agent-outputs/cycle-{N}-step-3-developer.md`
 
 重要提醒：
 - 未经允许不得变更架构。如需变更，必须明确申请。
@@ -173,6 +185,8 @@ Architect 的实现约束：[粘贴第 2 步的约束]
 测试范围：[具体要测试的功能，回归检查区域]
 
 输出格式：遵循 references/workflow-templates.md 中的测试报告模板
+
+**必须将测试报告写入文件**：`docs/agent-outputs/cycle-{N}-step-5-tester.md`
 ```
 
 ### 职责
