@@ -19,12 +19,10 @@ Page({
 
     authService.login().then(result => {
       if (result.success) {
-        const app = getApp();
-        if (app && typeof app.setUserSession === 'function') {
-          app.setUserSession(result.data);
-        }
+        // Session already stored by authService.login() — no need to duplicate
         wx.redirectTo({ url: '/pages/dashboard/index' });
       } else {
+        console.error('[login] login failed:', result.error);
         wx.showToast({
           title: result.error && result.error.message || '登录失败，请重试',
           icon: 'none',
@@ -32,7 +30,8 @@ Page({
         });
         this.setData({ loading: false });
       }
-    }).catch(() => {
+    }).catch(err => {
+      console.error('[login] login exception:', err);
       wx.showToast({
         title: '登录失败，请重试',
         icon: 'none',

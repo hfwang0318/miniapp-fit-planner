@@ -15,8 +15,29 @@
 | TC-AUTH-002 | 回访用户登录 | P0 | User 已存在 | 再次调用 login | 返回 openid，isNewUser=false | Automated | tests/unit/cloudfunctions/auth.test.js | 2026-05-15 |
 | TC-AUTH-003 | 无效 type | P1 | — | 传 type=invalid | 返回 error code=INVALID_TYPE | Automated | tests/unit/cloudfunctions/auth.test.js | 2026-05-15 |
 | TC-AUTH-004 | 缺失 OPENID | P1 | — | mock OPENID 为 undefined | 返回 error code=AUTH_FAILED | Automated | tests/unit/cloudfunctions/auth.test.js | 2026-05-15 |
-| TC-AUTH-005 | 服务层 wx.login 调用 | P0 | — | 检查 auth.js login() 代码 | wx.login() 在 cloud.callFunction 之前 | Manual（结构检查） | — | 2026-05-15 |
+| TC-AUTH-005 | 服务层 wx.login 调用 | P0 | — | 检查 auth.js login() 代码 | wx.login() 在 cloud.callFunction 之前 | Manual（结构检查） | — | 2026-05-16 |
 | TC-AUTH-006 | 未登录访问受保护页面 | P1 | 清除 storage | 直接访问 dashboard | 跳转 login 页面 | Pending（需 miniprogram-automator） | — | 2026-05-15 |
+| TC-AUTH-SVC-001 | 服务层成功登录 | P0 | wx.login+cloud.callFunction 成功 | authService.login() | 返回 success=true, data.openid, data.isNewUser | Automated | tests/unit/services/auth.test.js | 2026-05-16 |
+| TC-AUTH-SVC-002 | 云函数返回错误码 | P1 | cloud.callFunction 返回 error | authService.login() | 返回 success=false, error.code=UNAUTHORIZED | Automated | tests/unit/services/auth.test.js | 2026-05-16 |
+| TC-AUTH-SVC-003 | 云函数抛出异常 | P0 | cloud.callFunction 抛出 | authService.login() | 返回 success=false, error.code=AUTH_FAILED | Automated | tests/unit/services/auth.test.js | 2026-05-16 |
+| TC-AUTH-SVC-004 | 登录后存储 session | P0 | 登录成功 | authService.login() | 调用 app.setUserSession 含 openid | Automated | tests/unit/services/auth.test.js | 2026-05-16 |
+| TC-AUTH-SVC-005 | wx.login 失败不阻断 | P0 | wx.login 失败但云函数成功 | authService.login() | 仍返回 success=true（非致命） | Automated | tests/unit/services/auth.test.js | 2026-05-16 |
+| TC-AUTH-SVC-006 | error.code 缺失回退 | P1 | error 对象无 code 属性 | authService.login() | 回退为 AUTH_FAILED（不崩溃） | Automated | tests/unit/services/auth.test.js | 2026-05-16 |
+| TC-AUTH-SVC-007 | 结构化日志 | P1 | 成功路径 | authService.login() | console 调用含 [auth] 前缀 | Automated | tests/unit/services/auth.test.js | 2026-05-16 |
+| TC-AUTH-SVC-008 | getApp 为 null 的容错 | P1 | getApp 返回 null | authService.login() | 不影响登录返回值 | Automated | tests/unit/services/auth.test.js | 2026-05-16 |
+
+## Login 页面模块
+
+| Case ID | 标题 | 优先级 | 前置条件 | 步骤 | 预期结果 | 自动化 | 关联文件 | 维护时间 |
+|---------|------|--------|----------|------|----------|--------|----------|----------|
+| TC-LOGIN-001 | 成功登录跳转 dashboard | P0 | authService.login 返回 success | onLoginTap | wx.redirectTo dashboard | Automated | tests/unit/pages/login.test.js | 2026-05-16 |
+| TC-LOGIN-002 | 登录失败显示 toast | P0 | authService.login 返回 error | onLoginTap | wx.showToast 显示错误信息 | Automated | tests/unit/pages/login.test.js | 2026-05-16 |
+| TC-LOGIN-003 | 双击保护 | P1 | loading=true | onLoginTap | 不重复调用 authService.login | Automated | tests/unit/pages/login.test.js | 2026-05-16 |
+| TC-LOGIN-004 | catch 路径显示默认 toast | P0 | authService.login 抛出异常 | onLoginTap | wx.showToast 显示默认提示 | Automated | tests/unit/pages/login.test.js | 2026-05-16 |
+| TC-LOGIN-005 | catch 路径记录错误日志 | P1 | authService.login 抛出异常 | onLoginTap | console.error 被调用 | Automated | tests/unit/pages/login.test.js | 2026-05-16 |
+| TC-LOGIN-006 | 登录失败记录错误日志 | P1 | authService.login 返回 error | onLoginTap | console.error 被调用 | Automated | tests/unit/pages/login.test.js | 2026-05-16 |
+| TC-LOGIN-007 | loading 状态设置 | P1 | 开始登录 | onLoginTap | setData({loading: true}) 被调用 | Automated | tests/unit/pages/login.test.js | 2026-05-16 |
+| TC-LOGIN-008 | 已登录跳转 | P1 | isLoggedIn=true | onLoad | wx.redirectTo dashboard | Automated | tests/unit/pages/login.test.js | 2026-05-16 |
 
 ## Weight 模块
 
@@ -35,9 +56,10 @@
 
 | 模块 | P0 | P1 | P2 | 总计 | 已自动化 | Pending |
 |------|----|----|----|------|----------|---------|
-| Auth | 3 | 3 | 0 | 6 | 4 | 2 |
+| Auth | 7 | 7 | 0 | 14 | 12 | 2 |
+| Login | 3 | 5 | 0 | 8 | 8 | 0 |
 | Weight | 4 | 4 | 0 | 8 | 6 | 2 |
-| **总计** | **7** | **7** | **0** | **14** | **10** | **4** |
+| **总计** | **14** | **16** | **0** | **30** | **26** | **4** |
 
 ---
 
@@ -47,4 +69,4 @@ Bug 修复后建立的回归用例，与功能用例统一管理。
 
 | Bug ID | 标题 | 影响模块 | 复现步骤 | 根因 | 修复 | 回归测试 | 自动化 | 验证时间 |
 |--------|------|----------|----------|------|------|----------|--------|----------|
-| BUG-AUTH-001 | 点击登录提示"登录失败" | Auth 服务层 | 点击"微信一键登录" → 提示"登录失败" | `services/auth.js` 的 `login()` 缺少 `wx.login()` 调用 | 在 `wx.cloud.callFunction('auth')` 之前添加 `await wx.login()` | TC-AUTH-001 ~ TC-AUTH-004 | Automated | 2026-05-15 00:36 |
+| BUG-AUTH-001 | 点击登录提示"登录失败" | Auth 服务层 + Login 页面 | 点击"微信一键登录" → 提示"登录失败" | wx.login() 未正确封装(try/catch)；session 重复存储；属性访问不安全；缺少错误日志 | 1) wx.login() 改为非致命；2) 移除重复 session 存储；3) 安全化属性访问；4) 添加错误日志 | TC-AUTH-SVC-001 ~ TC-AUTH-SVC-008, TC-LOGIN-001 ~ TC-LOGIN-008 | Automated | 2026-05-16 |

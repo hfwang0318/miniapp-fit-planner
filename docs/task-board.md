@@ -24,5 +24,5 @@
 ## Done
 | ID | Title | Priority | Completed |
 |----|-------|----------|-----------|
-| T-001 | User Login | P0 | 2026-05-14 22:58 |
+| T-001 | User Login | P0 | 2026-05-16 00:03 |
 | T-004 | Clean up demo code + Basic weight management | P0 | 2026-05-14 22:58 |
