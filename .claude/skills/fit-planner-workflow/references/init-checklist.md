@@ -181,8 +181,14 @@
 ```bash
 mkdir -p docs/agent-outputs && touch docs/agent-outputs/.gitkeep
 ```
-说明：此目录存放每轮各 agent 的输出文件。
-文件命名：`cycle-{N}-step-{S}-{角色}.md`
+
+### tests/ 和 docs/testing/
+创建测试目录结构和测试文档：
+```bash
+mkdir -p tests/{unit,integration,e2e,fixtures,helpers,mocks,reports}
+mkdir -p docs/testing
+touch docs/testing/{TEST_STRATEGY,TEST_CASES,TEST_MATRIX,BUG_REGRESSION_CASES,TEST_RUN_HISTORY,TESTING_AGENT_LOG}.md
+```
 ```markdown
 # 变更日志
 

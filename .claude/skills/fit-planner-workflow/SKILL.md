@@ -188,8 +188,9 @@ agent 执行前**必须**阅读相关文档，执行后**必须**更新：
 | `references/agents/orchestrator.md` | Orchestrator 完整职责 |
 | `references/agents/architect.md` | Architect 完整职责 + 提示模板 |
 | `references/agents/developer.md` | Developer 完整职责 + 提示模板 |
-| `references/agents/tester.md` | Tester 完整职责 + 测试方法 |
+| `references/agents/tester.md` | Tester 完整职责（7 步测试流程 + Bug 流程） |
 | `references/testing-guide.md` | 小程序测试工具链和四级测试法 |
+| `docs/testing/` | 测试文档：策略、用例、矩阵、回归库 |
 | `references/workflow-templates.md` | 全部模板 |
 | `references/quality-gates.md` | 质量门禁清单 |
 | `references/architecture-constraints.md` | 架构约束、MVP、隐私规则 |

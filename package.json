@@ -1,0 +1,36 @@
+{
+  "name": "fit-planner",
+  "version": "1.0.0",
+  "description": "A WeChat mini program for collaborative weight management in small teams (~4 people).",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:unit": "jest tests/unit",
+    "test:integration": "jest tests/integration"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hfwang0318/miniapp-fit-planner.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/hfwang0318/miniapp-fit-planner/issues"
+  },
+  "homepage": "https://github.com/hfwang0318/miniapp-fit-planner#readme",
+  "jest": {
+    "roots": ["<rootDir>/tests", "<rootDir>/cloudfunctions"],
+    "moduleNameMapper": {
+      "^wx-server-sdk$": "<rootDir>/tests/__mocks__/wx-server-sdk.js"
+    }
+  },
+  "devDependencies": {
+    "jest": "^30.4.2"
+  }
+}

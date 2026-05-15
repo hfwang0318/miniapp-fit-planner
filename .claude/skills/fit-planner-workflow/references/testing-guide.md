@@ -1,91 +1,99 @@
-# 微信小程序测试指南
+# 微信小程序测试工具指南
 
-## 测试能力分级
+## 测试方法选择
 
-在 agent 环境中，无法打开 GUI 版微信开发者工具。但可以通过以下方式执行有意义的运行时验证：
+本项目是微信小程序 + 云开发。测试分为四个层级：
 
-### 级别 1：云函数本地测试（强烈推荐，可自动化）
+## 级别 1：云函数单元测试（Jest + mock）
 
-云函数是 Node.js 代码，在 agent 环境中**可以直接运行**。这是最有价值的测试方式。
+云函数是 Node.js 代码，**可以直接在 agent 环境中运行**。这是最可靠的运行时验证方式。
 
-**步骤**：
-1. 安装依赖：`cd cloudfunctions/<name> && npm install`
-2. 编写测试脚本或直接 require 函数
-3. 使用 mock 的 `wx-server-sdk` 上下文调用
+### 已安装
 
-**示例**：
+项目根目录已配置 Jest。
+
+### 运行方式
+
 ```bash
-# 测试 auth 云函数
-cd cloudfunctions/auth && npm install 2>/dev/null
+npm test -- tests/unit/cloudfunctions/
+```
+
+### Mock wx-server-sdk 方法
+
+创建测试文件时，在测试文件顶部 mock `wx-server-sdk`：
+
+```javascript
+jest.mock('wx-server-sdk', () => {
+  const mockDb = { /* 内存数据库 mock */ };
+  return function() {
+    return {
+      init: jest.fn(),
+      getWXContext: () => ({ OPENID: 'test-openid-xxx' }),
+      database: () => mockDb
+    };
+  };
+});
+```
+
+### 快速手动测试（无 Jest）
+
+```bash
+cd cloudfunctions/<name> && npm install 2>/dev/null
 node -e "
-const cloud = require('wx-server-sdk');
-cloud.init();
-// 模拟 getWXContext
-const origGetWXContext = cloud.getWXContext;
-cloud.getWXContext = () => ({ OPENID: 'test-openid-123' });
-// 测试 login
 const main = require('./index.js').main;
-main({ type: 'login' }, {}).then(r => console.log(JSON.stringify(r, null, 2)));
+// 通过模块缓存注入 mock...
+main({ type: 'login' }, {}).then(r => console.log(JSON.stringify(r)));
 "
 ```
 
-### 级别 2：服务层代码流程追踪
+## 级别 2：服务层代码追踪
 
-服务层（`miniprogram/services/`）依赖 `wx.*` API（在 agent 环境中不可用），但可以通过以下方式验证：
+服务层（`miniprogram/services/`）依赖 `wx.*` API，在 agent 环境中无法直接运行。验证方法：
 
-1. **代码执行路径验证**：追踪每个函数的调用链，确认所有分支可达
-2. **错误路径验证**：确认每个 `try/catch` 和错误返回路径存在
-3. **类型和参数验证**：确认函数签名与调用方一致
-4. **引用完整性**：确认所有 require 的模块路径存在且正确
+1. 代码执行路径追踪：确认每个分支可达
+2. 错误路径验证：确认 try/catch 和错误返回完整
+3. 参数验证：确认函数签名与调用方一致
+4. require 引用完整性：确认所有模块路径存在
 
-### 级别 3：页面层结构验证
+## 级别 3：页面层结构验证
 
-页面层（WXML/WXSS/JS）无法在 agent 环境中渲染，但可以：
+页面层无法在 agent 环境中渲染，验证方法：
 
-1. **WXML 数据绑定检查**：确认 WXML 中引用的变量在 JS 的 `data` 中有定义
-2. **事件绑定检查**：确认 WXML 中的 `bindtap`/`bindinput` 等在 JS 中有对应方法
-3. **组件引用检查**：确认 JSON 中声明的组件路径存在
-4. **文件完整性**：确认每个 page 有 4 个文件（js/wxml/wxss/json）
+1. WXML 数据绑定检查：引用的变量在 JS `data` 中定义
+2. 事件绑定检查：`bindtap`/`bindinput` 等在 JS `methods` 中有对应
+3. 组件引用检查：JSON 中声明的组件路径存在
+4. 文件完整性：每个 page 有 4 文件
 
-### 级别 4：开发者工具 CLI 测试（如果可用）
+## 级别 4：miniprogram-automator（需安装环境）
 
-微信开发者工具提供 CLI 接口，可以自动化编译：
+微信官方的自动化测试框架。需要真实微信开发者工具。
 
 ```bash
-# 检查项目能否编译
-/Applications/wechatwebdevtools.app/Contents/MacOS/cli --project-path /path/to/project --compile
+npm install --save-dev miniprogram-automator
 ```
 
-需要在电脑上安装微信开发者工具。如果不可用，跳过此级别。
+如环境不可用，跳过此级别，在 TEST_STRATEGY.md 中标注为"需开发者工具环境"。
 
-## 测试执行流程
+## 测试命令
 
-每个 Tester 任务按以下顺序执行：
+```bash
+npm test                          # 运行全量测试
+npm test -- tests/unit            # 仅单元测试
+npm test -- tests/integration     # 仅集成测试
+npm test -- --testPathPattern=xxx # 指定测试文件
+```
 
-### 步骤 A：云函数测试（执行实际代码）
+## 页面结构验证脚本
 
-对涉及的云函数执行级别 1 测试。**这是强制的运行时验证**：
-- 安装 npm 依赖
-- mock `cloud.getWXContext()` 返回测试 openid
-- 调用函数并验证返回值结构（`success`、`data`、`error` 字段）
-- 验证错误路径（传入 invalid type 应返回 error）
+```
+# 检查页面文件完整性
+for page_dir in miniprogram/pages/*/; do
+  page=$(basename "$page_dir")
+  for ext in js wxml wxss json; do
+    [ -f "${page_dir}index.${ext}" ] || echo "MISSING: ${page_dir}index.${ext}"
+  done
+done
 
-### 步骤 B：服务层代码追踪
-
-验证修改涉及的所有服务层代码的执行路径。
-
-### 步骤 C：页面层结构验证
-
-验证修改涉及的所有页面的绑定和引用完整性。
-
-### 步骤 D：完整性检查
-
-- 所有 require 路径存在
-- 所有 page 注册在 app.json 中
-- 所有 component 在对应 json 中声明
-
-## 输出要求
-
-测试报告必须包含：
-1. **"运行时验证命令及输出"** 部分：粘贴实际执行的 bash 命令及其输出（级别 1 的结果）
-2. 测试用例表格中 **"实际输出"** 列必须填实际值，不能只写 PASS/FAIL
+# 检查 app.json 注册的页面路径存在
+# (需要 python 或 node 解析 JSON)
+```
