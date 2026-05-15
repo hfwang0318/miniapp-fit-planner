@@ -15,6 +15,26 @@
 
 ---
 
+---
+
+## Cycle 3 — 修复微信一键登录报错 — 2026-05-16 00:03
+
+**结果**：DONE | **分支**：`fix/login-error` | **提交**：待提交 | **迭代**：1 轮
+
+| 步骤 | 版本 | Agent | 结论 | 输出 |
+|------|------|-------|------|------|
+| 1 | — | Orchestrator | P0 bug，登录 toast 错误 | [step-1](agent-outputs/cycle-1/step-1-orchestrator.md) |
+| 2 | — | — | 跳过（无架构影响） | — |
+| 3 | v1 | Developer | 完成（日志+容错+安全访问） | [step-3](agent-outputs/cycle-1/step-3-developer-v1.md) |
+| 4 | v1 | Reviewer | APPROVED | [step-4](agent-outputs/cycle-1/step-4-reviewer-v1.md) |
+| 5 | v1 | Tester | PASS（含运行时验证） | [step-5](agent-outputs/cycle-1/step-5-tester-v1.md) |
+| 6 | — | Orchestrator | DONE | [step-6](agent-outputs/cycle-1/step-6-orchestrator.md) |
+
+### 修复
+- `services/auth.js` login() 中 `wx.login()` 改为非致命调用，失败后仍尝试云函数；添加 `[auth]` 前缀结构化日志覆盖全部执行路径；安全化 `result.result.error.code` 属性访问防止 TypeError
+- `pages/login/index.js` 移除重复的 `app.setUserSession()` 调用；`.catch()` 和 `else` 分支添加 `console.error` 日志
+- 新增 16 个测试用例（auth service 8 个 + login page 8 个），全量 20 个测试通过
+
 ## Cycle 2 — 修复登录失败 Bug — 2026-05-15 00:20
 
 **结果**：DONE | **分支**：fix/missing-wx-login | **提交**：c7f5b60 | **迭代**：1 轮

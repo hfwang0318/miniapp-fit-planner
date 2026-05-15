@@ -7,6 +7,7 @@
 | 2026-05-15 00:36 | Cycle 2 登录修复 v2 | auth 云函数 | `npm test -- tests/unit/cloudfunctions/auth` | 4 | 0 | 0 | PASS | 运行时验证 |
 | 2026-05-15 00:20 | Cycle 2 登录修复 v1 | 静态分析 | 无实际命令 | 5 | 0 | 0 | PASS（无效） | 仅静态分析，后续发现流程缺陷 |
 | 2026-05-14 22:58 | Cycle 1 基础体重管理 | 全量 | 静态分析 | 16 | 0 | 0 | PASS WITH WARNINGS | 首次功能实现 |
+| 2026-05-16 | Cycle 1 登录错误修复 v1 | 全量 | `npm test` | 20 | 0 | 0 | PASS | 运行时验证；auth 服务层 + login 页面 16 个测试 |
 
 ---
 
