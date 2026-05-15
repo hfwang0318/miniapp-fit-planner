@@ -1,99 +1,94 @@
 # Fit Planner
 
-A WeChat mini program for collaborative weight management in small teams (~4 people).
+一款用于小团队（约 4 人）协作体重管理的微信小程序。
 
-## Overview
+## 概述
 
-Fit Planner enables small teams to manage weight together through mutual accountability. Members can join a team, record their weight, set personal goals, view trends, and track team progress — all while maintaining privacy control over sensitive weight data.
+Fit Planner 通过相互监督帮助小团队一起管理体重。成员可以加入团队、记录体重、设定个人目标、查看趋势、追踪团队进度 — 同时保持对敏感体重数据的隐私控制。
 
-## Tech Stack
+## 技术栈
 
-- **Frontend**: Native WeChat Mini Program (WXML + WXSS + JavaScript)
-- **Backend**: WeChat Cloud Development (云开发)
-  - Cloud Functions for server-side logic
-  - Cloud Database for data storage
-  - Cloud Storage for file storage
-- **Authentication**: wx.login() + cloud function (openid-based)
-- **State Management**: Page-level state + global app data for session
-- **Charts**: Custom lightweight canvas-based line chart
+- **前端**：微信小程序原生开发（WXML + WXSS + JavaScript）
+- **后端**：微信云开发
+  - 云函数用于服务端逻辑
+  - 云数据库用于数据存储
+  - 云存储用于文件存储
+- **身份认证**：wx.login() + 云函数（基于 openid）
+- **状态管理**：页面级状态 + 全局应用数据保存用户会话
+- **图表**：自定义轻量级 Canvas 折线图
 
-## Project Structure
+## 项目结构
 
 ```
 miniprogram/
-  pages/           # Page-level components
-    index/         # Dashboard
-    login/         # Login page
-    team/          # Team management
-    weight/        # Weight recording
-    profile/       # User profile and settings
-  components/      # Reusable UI components
-  services/        # Business logic layer
-  stores/          # State management
-  utils/           # Pure utility functions
-  models/          # Data type definitions / validation
-  config/          # App configuration
-  assets/          # Static assets
+  pages/           # 页面级组件
+    dashboard/     # 首页仪表盘
+    login/         # 登录页
+    weight/        # 体重记录
+  components/      # 可复用 UI 组件
+  services/        # 业务逻辑层
+  stores/          # 状态管理
+  utils/           # 纯工具函数
+  models/          # 数据类型定义 / 校验
+  config/          # 应用配置
 
-cloudfunctions/    # Cloud functions
-  auth/            # Login, session management
-  team/            # Team operations
-  weight/          # Weight record operations
-  invitation/      # Invite code generation and validation
+cloudfunctions/    # 云函数
+  auth/            # 登录、会话管理
+  weight/          # 体重记录操作
 
-docs/              # Project documentation
+docs/              # 项目文档
 ```
 
-## Getting Started
+## 快速开始
 
-1. **Open in WeChat DevTools**
-   - Open WeChat DevTools
-   - Import project from this directory
-   - Use AppID
+1. **在微信开发者工具中打开**
+   - 打开微信开发者工具
+   - 从本目录导入项目
+   - 使用已配置的 AppID
 
-2. **Configure Cloud Environment**
-   - Create a cloud development environment in WeChat DevTools
-   - Update the `env` value in `miniprogram/app.js` with your environment ID
-   - Initialize cloud database collections (see `docs/data-model.md`)
+2. **配置云环境**
+   - 在微信开发者工具中创建云开发环境
+   - 更新 `miniprogram/app.js` 中的 `env` 值为你的环境 ID
+   - 初始化云数据库集合（参见 `docs/data-model.md`）
 
-3. **Deploy Cloud Functions**
-   - Right-click each cloud function directory in DevTools
-   - Select "Upload and Deploy"
-   - Verify deployment in cloud development console
+3. **部署云函数**
+   - 在开发者工具中右键每个云函数目录
+   - 选择"上传并部署"
+   - 在云开发控制台中验证部署状态
 
-4. **Compile and Preview**
-   - Use the DevTools compiler and preview on mobile
-   - Test login flow and core features
+4. **编译与预览**
+   - 使用开发者工具编译并在手机上预览
+   - 测试登录流程和核心功能
 
-## Development Workflow
+## 开发工作流
 
-This project uses the `fit-planner-workflow` skill for multi-agent development. The workflow enforces:
+本项目使用 `fit-planner-workflow` 技能进行多 Agent 开发。工作流强制执行：
 
-- **Architecture review** before code changes
-- **Test sign-off** before merging
-- **Documentation sync** with every change
-- **Git discipline** (feature branches, commit conventions)
+- **架构审查** — 代码变更前必须经过架构评审
+- **测试签核** — 合并前必须通过测试验证
+- **文档同步** — 每次变更同步更新文档
+- **Git 规范** — 功能分支、提交约定
 
-See `docs/` for all project documentation.
+详见 `docs/` 中的项目文档。
 
-## MVP Features
+## MVP 功能
 
-| Priority | Feature | Status |
-|----------|---------|--------|
-| P0 | User login | Planned |
-| P0 | Create team | Planned |
-| P0 | Join team (via invitation code) | Planned |
-| P0 | Record weight | Planned |
-| P0 | Set goal weight | Planned |
-| P0 | Personal weight trend | Planned |
-| P0 | Team progress overview | Planned |
-| P0 | Check-in | Planned |
-| P0 | Basic privacy settings | Planned |
-| P0 | Dashboard homepage | Planned |
-| P1 | Edit/delete weight record | Planned |
+| 优先级 | 功能 | 状态 |
+|--------|------|------|
+| P0 | 用户登录 | 已规划 |
+| P0 | 创建团队 | 已规划 |
+| P0 | 加入团队（通过邀请码） | 已规划 |
+| P0 | 记录体重 | 已规划 |
+| P0 | 设定目标体重 | 已规划 |
+| P0 | 个人体重趋势 | 已规划 |
+| P0 | 团队进度概览 | 已规划 |
+| P0 | 打卡 | 已规划 |
+| P0 | 基础隐私设置 | 已规划 |
+| P0 | 首页仪表盘 | 已规划 |
+| P1 | 编辑/删除体重记录 | 已规划 |
 
-See `docs/feature-list.md` for the complete list.
+完整列表参见 `docs/requirements.md`。
 
 ## License
 
-Private project — internal use.
+私有项目 — 内部使用。

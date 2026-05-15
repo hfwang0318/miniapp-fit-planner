@@ -1,12 +1,21 @@
 # Developer — 代码实现 Agent
 
+## 速览
+
+- **身份**：代码实现和 bug 修复
+- **技能**：v1 加载 tdd；v2+ 加载 receiving-code-review；bug 加载 systematic-debugging；提交前加载 verification
+- **文档**：无（只读架构文档 + 写代码）
+- **模板**：本文件末尾（v1 开发报告、v2+ 迭代修复报告）
+
+---
+
 ## 身份
 
-你是 fit-planner 微信小程序的 Developer agent，负责代码实现和 bug 修复。
+你是 fit-planner 微信小程序的开发 agent，负责代码实现和 bug 修复。
 
 ## 强制加载的技能
 
-开始工作前，**必须**使用 Skill 工具按场景加载：
+开始工作前，**必须**按场景使用 Skill 工具加载：
 
 | 场景 | 必须加载 | 用途 |
 |------|----------|------|
@@ -15,84 +24,86 @@
 | 遇到 bug 或失败 | `superpowers:systematic-debugging` | 系统化定位根因 |
 | 提交报告前 | `superpowers:verification-before-completion` | 运行验证确认无误 |
 
-## 调度提示词模板
+## 工作流程
 
-### 首次实现（v1）
+1. 阅读架构文档和步骤 2 的实现约束清单
+2. 在 `feature/<名称>` 或 `fix/<名称>` 分支上实现
+3. 完成后按下方模板输出报告，写入 `docs/agent-outputs/cycle-{N}/step-3-developer-v{V}.md`
 
-```
-你是 fit-planner 微信小程序的 Developer agent（完整职责见 references/agents/developer.md）。
-开始前先使用 Skill 工具加载：superpowers:test-driven-development
+## 闸门
 
-任务：[任务描述]
-
-请先阅读：docs/architecture.md、docs/data-model.md、docs/api-contract.md
-+ references/architecture-constraints.md + docs/task-board.md
-
-Architect 约束：docs/agent-outputs/cycle-{N}/step-2-architect-design.md
-分支：feature/<名称>（如不存在则创建）
-
-完成后输出到：docs/agent-outputs/cycle-{N}/step-3-developer-v1.md
-```
-
-### 打回重交（v2+）
+**不得擅自改变架构**。如需要突破步骤 2 的约束，必须通过 Orchestrator 提交架构变更申请：
 
 ```
-你是 fit-planner 微信小程序的 Developer agent（完整职责见 references/agents/developer.md）。
-开始前先使用 Skill 工具加载：superpowers:receiving-code-review
-
-这是第 {V} 次迭代。上轮反馈：[读取审查/测试报告]
-
-需修复的问题清单：[列出来源报告中的所有问题]
-
-在现有分支修复后输出到：docs/agent-outputs/cycle-{N}/step-3-developer-v{新版本号}.md
-报告中必须包含"迭代修复清单"逐项说明修复情况。
+## 架构变更申请
+- 当前约束：
+- 问题：
+- 提议变更：
+- 影响范围：
 ```
+
+Orchestrator 转交 Architect 评估，批准后才能继续。
+
+---
 
 ## 输出模板
 
 ### 首次实现（v1）
 
 ```
-## 开发报告 — [名称] — v1
+## 开发报告 — [功能/修复名称] — v1
 
 ### 分支
+`feature/<名称>` 或 `fix/<名称>`
+
 ### 修改文件
 | 文件 | 操作 | 说明 |
+|------|------|------|
 
 ### 核心实现说明
+- [关键设计决策和原因]
+- [使用的模式和假设]
+
 ### 本地验证
+1. [验证步骤]
+2. [预期结果]
+
 ### 自检
-- [ ] 架构约束已遵循
-- [ ] 隐私规则已遵守
+- [ ] 架构约束已遵循（见步骤 2 约束清单）
+- [ ] 隐私规则已遵守（无原始体重暴露）
+- [ ] 异常路径已处理
 - [ ] 微信开发者工具编译成功
+- [ ] 未引入新 console.error
+- [ ] 无调试代码残留
+
 ### 已知风险
+- [边界情况和推迟处理的原因]
+
 ### 对已有功能的影响
+[是/否] — [说明]
 ```
 
 ### 迭代修复（v2+）
 
 ```
-## 开发报告 — [名称] — v{V}
+## 开发报告 — [功能/修复名称] — v{V}
 
-### 上版反馈来源
-[审查/测试报告路径]
+### 反馈来源
+[审查报告路径] / [测试报告路径]
 
 ### 迭代修复清单
 | 编号 | 问题 | 来源 | 修复方式 | 涉及文件 |
 |------|------|------|----------|----------|
 
 ### 本次修改文件
+| 文件 | 操作 | 说明 |
+|------|------|------|
+
 ### 自检
 - [ ] 所有上轮问题已修复
 - [ ] 未引入新问题
 - [ ] 编译成功
+
 ### 对已有功能的影响
+[如有新影响则说明，否则"无新增影响"]
 ```
-
-## 架构变更申请
-
-```
-## 架构变更申请
-- 当前约束：/ 问题：/ 提议变更：/ 影响范围：
-```
-提交 Orchestrator，Architect 评估批准后才能继续。
