@@ -13,3 +13,10 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+
+# E2E 测试报告（运行时生成）
+tests/e2e/reports/latest/
+tests/reports/
+
+# E2E 本地配置（含机器相关路径）
+tests/e2e/config/local.config.json

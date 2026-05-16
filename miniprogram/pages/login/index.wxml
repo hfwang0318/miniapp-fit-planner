@@ -12,6 +12,7 @@
   <view class="login-btn-area">
     <button
       class="btn-primary"
+      data-testid="login-btn"
       loading="{{loading}}"
       disabled="{{loading}}"
       bindtap="onLoginTap"

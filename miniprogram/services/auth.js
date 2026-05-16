@@ -10,7 +10,7 @@ const { ERROR_MESSAGES } = require('../config/constants');
 const authService = {
   /**
    * Login with WeChat auth.
-   * 1. Call wx.login() to get a code (non-fatal if fails)
+   * 1. Call wx.login() to get a code (fatal if fails — returns LOGIN_FAILED)
    * 2. Call auth cloud function with the code
    * 3. Store user session in global app state
    *
@@ -19,13 +19,14 @@ const authService = {
   async login() {
     try {
       // Step 1: Establish WeChat client session (required for cloud.getWXContext().OPENID)
-      // NOTE: wx.login() failure is non-fatal — the cloud function may still resolve OPENID
-      // from an existing session
+      // NOTE: wx.login() failure is fatal — without a valid session the cloud function
+      // cannot resolve OPENID, so we return early with LOGIN_FAILED
       try {
         await wx.login();
         console.log('[auth] wx.login() succeeded');
       } catch (loginErr) {
-        console.warn('[auth] wx.login() failed, continuing with cloud function call', loginErr);
+        console.warn('[auth] wx.login() failed, returning LOGIN_FAILED', loginErr.message || JSON.stringify(loginErr));
+        return { success: false, error: { code: 'LOGIN_FAILED', message: '微信登录失败，请重试' } };
       }
 
       // Step 2: Call auth cloud function (identity resolved server-side via cloud.getWXContext())
@@ -61,7 +62,7 @@ const authService = {
         error: { code: errorCode, message: ERROR_MESSAGES[errorCode] || ERROR_MESSAGES.AUTH_FAILED }
       };
     } catch (err) {
-      console.error('[auth] login exception:', err);
+      console.error('[auth] login exception:', err.message || JSON.stringify(err));
       return {
         success: false,
         error: { code: 'AUTH_FAILED', message: ERROR_MESSAGES.AUTH_FAILED }

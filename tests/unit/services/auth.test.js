@@ -92,20 +92,18 @@ describe('authService.login()', () => {
     );
   });
 
-  test('TC-AUTH-SVC-005: wx.login() failure is non-fatal — login still proceeds', async () => {
-    // wx.login() rejects but cloud function still returns success
+  test('TC-AUTH-SVC-005: wx.login() failure returns LOGIN_FAILED', async () => {
+    // wx.login() rejects — without a valid session the cloud function cannot
+    // resolve OPENID, so the service returns early with LOGIN_FAILED
     global.wx.login.mockRejectedValue(new Error('login:fail'));
-    global.wx.cloud.callFunction.mockResolvedValue({
-      result: { success: true, data: { openid: 'test-openid-123', isNewUser: true } }
-    });
 
     const authService = require('../../../miniprogram/services/auth');
     const result = await authService.login();
 
-    // This test should FAIL with the current code because wx.login() rejection
-    // throws out of the try block. After the fix, it should PASS.
-    expect(result.success).toBe(true);
-    expect(result.data.openid).toBe('test-openid-123');
+    // wx.login() failure should interrupt the flow — cloud function is NOT called
+    expect(result.success).toBe(false);
+    expect(result.error.code).toBe('LOGIN_FAILED');
+    expect(global.wx.cloud.callFunction).not.toHaveBeenCalled();
   });
 
   test('TC-AUTH-SVC-006: cloud function error without .error.code falls back to AUTH_FAILED', async () => {

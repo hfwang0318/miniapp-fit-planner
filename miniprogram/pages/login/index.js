@@ -22,7 +22,7 @@ Page({
         // Session already stored by authService.login() — no need to duplicate
         wx.redirectTo({ url: '/pages/dashboard/index' });
       } else {
-        console.error('[login] login failed:', result.error);
+        console.error('[login] login failed:', result.error.message || JSON.stringify(result.error));
         wx.showToast({
           title: result.error && result.error.message || '登录失败，请重试',
           icon: 'none',
@@ -31,7 +31,7 @@ Page({
         this.setData({ loading: false });
       }
     }).catch(err => {
-      console.error('[login] login exception:', err);
+      console.error('[login] login exception:', err.message || JSON.stringify(err));
       wx.showToast({
         title: '登录失败，请重试',
         icon: 'none',
