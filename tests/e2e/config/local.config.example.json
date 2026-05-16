@@ -1,0 +1,10 @@
+{
+  "_note": "复制此文件为 local.config.json 并修改实际路径。local.config.json 已加入 .gitignore。",
+  "cliPath": "/Applications/wechatwebdevtools.app/Contents/MacOS/cli",
+  "projectPath": "miniprogram",
+  "defaultTimeout": 30000,
+  "headless": true,
+  "env": {
+    "NODE_ENV": "test"
+  }
+}

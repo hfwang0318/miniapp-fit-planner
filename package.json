@@ -10,7 +10,17 @@
   "scripts": {
     "test": "jest",
     "test:unit": "jest tests/unit",
-    "test:integration": "jest tests/integration"
+    "test:integration": "jest tests/integration",
+    "test:doctor": "node tests/tools/doctor.js",
+    "test:scan": "node tests/tools/scan-project.js",
+    "test:structure": "node tests/tools/run-structure.js",
+    "test:e2e": "node tests/e2e/tools/run-all.js",
+    "test:e2e:doctor": "node tests/e2e/tools/doctor.js",
+    "test:e2e:run": "node tests/e2e/tools/run-spec.js",
+    "test:e2e:clean": "node tests/e2e/tools/clean-reports.js",
+    "test:related": "node tests/tools/run-related.js",
+    "test:all": "node tests/tools/run-all.js",
+    "test:clean": "node tests/tools/clean-reports.js"
   },
   "repository": {
     "type": "git",
@@ -25,12 +35,16 @@
   },
   "homepage": "https://github.com/hfwang0318/miniapp-fit-planner#readme",
   "jest": {
-    "roots": ["<rootDir>/tests", "<rootDir>/cloudfunctions"],
+    "roots": [
+      "<rootDir>/tests",
+      "<rootDir>/cloudfunctions"
+    ],
     "moduleNameMapper": {
       "^wx-server-sdk$": "<rootDir>/tests/__mocks__/wx-server-sdk.js"
     }
   },
   "devDependencies": {
-    "jest": "^30.4.2"
+    "jest": "^30.4.2",
+    "miniprogram-automator": "^0.12.1"
   }
 }

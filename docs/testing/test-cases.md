@@ -21,7 +21,7 @@
 | TC-AUTH-SVC-002 | 云函数返回错误码 | P1 | cloud.callFunction 返回 error | authService.login() | 返回 success=false, error.code=UNAUTHORIZED | Automated | tests/unit/services/auth.test.js | 2026-05-16 |
 | TC-AUTH-SVC-003 | 云函数抛出异常 | P0 | cloud.callFunction 抛出 | authService.login() | 返回 success=false, error.code=AUTH_FAILED | Automated | tests/unit/services/auth.test.js | 2026-05-16 |
 | TC-AUTH-SVC-004 | 登录后存储 session | P0 | 登录成功 | authService.login() | 调用 app.setUserSession 含 openid | Automated | tests/unit/services/auth.test.js | 2026-05-16 |
-| TC-AUTH-SVC-005 | wx.login 失败不阻断 | P0 | wx.login 失败但云函数成功 | authService.login() | 仍返回 success=true（非致命） | Automated | tests/unit/services/auth.test.js | 2026-05-16 |
+| TC-AUTH-SVC-005 | wx.login 失败立即返回 | P0 | wx.login 失败 | authService.login() | 返回 success=false, error.code=LOGIN_FAILED，不调用云函数 | Automated | tests/unit/services/auth.test.js | 2026-05-16 |
 | TC-AUTH-SVC-006 | error.code 缺失回退 | P1 | error 对象无 code 属性 | authService.login() | 回退为 AUTH_FAILED（不崩溃） | Automated | tests/unit/services/auth.test.js | 2026-05-16 |
 | TC-AUTH-SVC-007 | 结构化日志 | P1 | 成功路径 | authService.login() | console 调用含 [auth] 前缀 | Automated | tests/unit/services/auth.test.js | 2026-05-16 |
 | TC-AUTH-SVC-008 | getApp 为 null 的容错 | P1 | getApp 返回 null | authService.login() | 不影响登录返回值 | Automated | tests/unit/services/auth.test.js | 2026-05-16 |
@@ -61,6 +61,15 @@
 | Weight | 4 | 4 | 0 | 8 | 6 | 2 |
 | **总计** | **14** | **16** | **0** | **30** | **26** | **4** |
 
+## Login 页面 E2E 回归用例
+
+| Case ID | 标题 | 优先级 | 前置条件 | 步骤 | 预期结果 | 自动化 | 关联文件 | 维护时间 |
+|---------|------|--------|----------|------|----------|--------|----------|----------|
+| TC-LOGIN-E2E-001 | 登录按钮存在且可点击 | P0 | E2E 环境就绪 | 导航到登录页 → 查找 `[data-testid="login-btn"]` | 按钮元素存在 | Automated (E2E) | tests/e2e/specs/login.spec.js | 2026-05-16 v2 验证通过 |
+| TC-LOGIN-E2E-002 | 登录按钮点击后 loading 正确变化 | P0 | 已打开登录页 | 点击登录按钮 → 等待 → 检查 page.data.loading | loading 先 true 后 false | Automated (E2E) | tests/e2e/specs/login.spec.js | 2026-05-16 v2 验证通过 |
+| TC-LOGIN-E2E-003 | 登录流程无 [object Object] 运行时错误 | P0 | 已打开登录页 | 点击登录按钮 → 检查运行时错误 | 无 [object Object] 错误 | Automated (E2E) | tests/e2e/specs/login.spec.js | 2026-05-16 v2 验证通过 |
+| TC-LOGIN-E2E-004 | 登录失败页面不崩溃 | P0 | 已打开登录页 | 点击登录按钮 → 等待 → 检查页面存活 | 页面停留在 login 或跳转 | Automated (E2E) | tests/e2e/specs/login.spec.js | 2026-05-16 v2 验证通过 |
+
 ---
 
 ## Bug 回归用例
@@ -69,4 +78,7 @@ Bug 修复后建立的回归用例，与功能用例统一管理。
 
 | Bug ID | 标题 | 影响模块 | 复现步骤 | 根因 | 修复 | 回归测试 | 自动化 | 验证时间 |
 |--------|------|----------|----------|------|------|----------|--------|----------|
-| BUG-AUTH-001 | 点击登录提示"登录失败" | Auth 服务层 + Login 页面 | 点击"微信一键登录" → 提示"登录失败" | wx.login() 未正确封装(try/catch)；session 重复存储；属性访问不安全；缺少错误日志 | 1) wx.login() 改为非致命；2) 移除重复 session 存储；3) 安全化属性访问；4) 添加错误日志 | TC-AUTH-SVC-001 ~ TC-AUTH-SVC-008, TC-LOGIN-001 ~ TC-LOGIN-008 | Automated | 2026-05-16 |
+| BUG-AUTH-001 | 点击登录提示"登录失败" | Auth 服务层 + Login 页面 | 点击"微信一键登录" → 提示"登录失败" | wx.login() 失败后流程未中断，云函数 AUTH_FAILED；console 传入 Error 对象 | 1) wx.login() 失败改为致命（立即返回 LOGIN_FAILED）；2) 修复 auth.js 中 3 处 Error 对象日志 | TC-AUTH-SVC-001 ~ TC-AUTH-SVC-008, TC-LOGIN-001 ~ TC-LOGIN-008 | Automated | 2026-05-16 |
+| BUG-LOGIN-002 | 登录页面 console.error 传入 Error 对象 | Login 页面 | 在线登录页面点击"微信一键登录" → 登录失败 | pages/login/index.js:25 直接传入 result.error（对象） | 改为 `result.error.message || JSON.stringify(result.error)` | TC-LOGIN-E2E-003 | Automated (E2E) | 2026-05-16 v2 验证通过 |
+| BUG-LOGIN-003 | 登录页面 catch 路径 console.error 传入 Error 对象 | Login 页面 | 登录抛出异常 | pages/login/index.js:34 直接传入 err（Error 对象） | 改为 `err.message || JSON.stringify(err)` | TC-LOGIN-E2E-003 | Automated (E2E) | 2026-05-16 v2 验证通过 |
+| BUG-WEIGHT-001 | 体重页面导航时出现 `[WEIGHT_RECORD] getWeights error` 运行时错误 | Weight 页面 | 导航到体重页面 | weight 页面 onLoad 时调用 getWeights 云函数失败 | 待确认根因 | navigation.spec.js runtime-errors | Automated (E2E) | 2026-05-16 v2 验证 — 遗留问题 |

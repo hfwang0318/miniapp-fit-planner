@@ -5,6 +5,8 @@
 | 时间 | 触发 | 范围 | 命令 | 通过 | 失败 | 跳过 | 结论 | 备注 |
 |------|------|------|------|------|------|------|------|------|
 | 2026-05-15 00:36 | Cycle 2 登录修复 v2 | auth 云函数 | `npm test -- tests/unit/cloudfunctions/auth` | 4 | 0 | 0 | PASS | 运行时验证 |
+| 2026-05-16 13:00 | Cycle 3 登录失败修复回归 | 全量（单元+结构+E2E） | `npm run test:unit` + `npm run test:structure` + `npm run test:e2e` | 20 单元 + 12 结构 + 12 E2E | 3 (2 login + 1 weight) | 0 | FAIL | 单元+结构通过；E2E login.spec.js 和 navigation.spec.js 因 [object Object] 运行时错误失败 |
+| 2026-05-16 13:30 | Cycle 3 登录失败修复 v2 | 全量（单元+结构+E2E） | `npm run test:unit` + `npm run test:structure` + `npm run test:e2e` | 20 单元 + 12 结构 + 18 E2E | 1 (BUG-WEIGHT-001 遗留) | 0 | PASS WITH WARNINGS | BUG-LOGIN-002/003 已修复；weight 页面 [WEIGHT_RECORD] getWeights error 为遗留问题 |
 | 2026-05-15 00:20 | Cycle 2 登录修复 v1 | 静态分析 | 无实际命令 | 5 | 0 | 0 | PASS（无效） | 仅静态分析，后续发现流程缺陷 |
 | 2026-05-14 22:58 | Cycle 1 基础体重管理 | 全量 | 静态分析 | 16 | 0 | 0 | PASS WITH WARNINGS | 首次功能实现 |
 | 2026-05-16 | Cycle 1 登录错误修复 v1 | 全量 | `npm test` | 20 | 0 | 0 | PASS | 运行时验证；auth 服务层 + login 页面 16 个测试 |
