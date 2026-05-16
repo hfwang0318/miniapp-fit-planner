@@ -28,7 +28,7 @@
 ## 工作流程
 
 1. **拉取最新 main**：`git fetch origin && git checkout main && git pull origin main`
-2. **创建开发分支**：`git checkout -b feature/<名称>` 或 `git checkout -b fix/<名称>`（从最新 main 分出）
+2. **创建开发分支**：`git checkout -b feature/<名称>-<YYYY-MM-DD-HHMM>` 或 `git checkout -b fix/<名称>-<YYYY-MM-DD-HHMM>`（从最新 main 分出。时间通过 `date "+%Y-%m-%d-%H%M"` 获取）
 3. 阅读架构文档和步骤 2 的实现约束清单
 4. 在分支上实现
 5. 完成后按下方模板输出报告，写入 `docs/agent-outputs/cycle-{N}/step-3-developer-v{V}.md`
