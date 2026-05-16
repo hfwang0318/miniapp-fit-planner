@@ -83,14 +83,7 @@ description: >
 
 ### 步骤 6 — Orchestrator：收尾
 
-加载 `superpowers:finishing-a-development-branch`。审阅所有输出 → 更新 `docs/changelog.md` → 验证 Git 状态（详见 `references/quality-gates.md`）→ 生成提交信息 → 合并到 `main` / 推送 PR。
-
-**PR 创建后必须清理本地分支**：
-1. `git checkout main` 切回主分支
-2. `git branch -d feature/<名称>` 删除本地开发分支（PR 已推送远端，本地不再需要）
-3. 如果 feature 分支未合并（有 PR 但未 merge），使用 `git branch -D` 强制删除
-
-输出按 orchestrator.md 中的模板。
+加载 `superpowers:finishing-a-development-branch`。审阅所有输出 → 更新 `docs/changelog.md` → 验证 Git 状态（详见 `references/quality-gates.md`）→ 生成提交信息 → 合并到 `main` / 推送 PR。**不清理本地开发分支**。输出按 orchestrator.md 中的模板。
 
 ## 调度规则
 
