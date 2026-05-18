@@ -15,6 +15,27 @@
 
 ---
 
+## Cycle 5 — 修复体重记录时间和布局 Bug — 2026-05-18
+<!-- 时间通过 date "+%Y-%m-%d %H:%M" 获取，禁止编造 -->
+
+**类型**：Bug 修复 | **结果**：DONE | **分支**：fix/weight-time-layout | **提交**：待提交 | **迭代**：2 轮
+
+| 步骤 | 版本 | Agent | 结论 | 输出 |
+|------|------|-------|------|------|
+| 1 | — | 主对话 | DONE | [spec](workflow/001-1-spec.md) |
+| 2 | v1 | Implementer | DONE | [report](workflow/001-2-implementer-v1.md) |
+| 3 | v1 | Reviewer | PASS | [report](workflow/001-3-reviewer-v1.md) |
+| 4 | v1 | Validator | FAIL（WXSS 布局不完整） | [report](workflow/001-4-validator-v1.md) |
+| 2 | v2 | Implementer | DONE（WXSS 布局修复） | [report](workflow/001-2-implementer-v2.md) |
+| 3 | v2 | Reviewer | PASS | [report](workflow/001-3-reviewer-v2.md) |
+| 4 | v2 | Validator | PASS | [report](workflow/001-4-validator-v2.md) |
+
+### 修复
+- `miniprogram/utils/date.js`：新增 `formatDateTime()` 函数，输出 `YYYY-MM-DD HH:mm` 格式
+- `miniprogram/pages/weight/index.js`：`loadRecords()` 中添加 `_formattedDate` 字段
+- `miniprogram/pages/weight/index.wxml`：时间显示从 `item.recordedAt` 改为 `item._formattedDate`
+- `miniprogram/pages/weight/index.wxss`：添加 `.card`、`.record-item`、`.record-info`、`.record-actions`、`.flex-between` 布局约束
+
 ---
 
 ## Cycle 4 — 微信一键登录提示失败（根因修复 + 空值保护） — 2026-05-17 13:18

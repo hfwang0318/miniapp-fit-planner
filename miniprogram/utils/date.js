@@ -28,6 +28,23 @@ function formatDateShort(date) {
 }
 
 /**
+ * Format a date to YYYY-MM-DD HH:mm string.
+ * @param {Date|string} date
+ * @returns {string}
+ */
+function formatDateTime(date) {
+  if (!date) return '';
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return '';
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  const hour = String(d.getHours()).padStart(2, '0');
+  const minute = String(d.getMinutes()).padStart(2, '0');
+  return `${year}-${month}-${day} ${hour}:${minute}`;
+}
+
+/**
  * Check if a date is in the future.
  * @param {Date|string} date
  * @returns {boolean}
@@ -64,6 +81,7 @@ function daysBetween(a, b) {
 module.exports = {
   formatDate,
   formatDateShort,
+  formatDateTime,
   isFutureDate,
   today,
   daysBetween
