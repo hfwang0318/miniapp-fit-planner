@@ -1,7 +1,7 @@
 const weightService = require('../../services/weight');
 const { validate } = require('../../models/weight');
 const { formatWeight } = require('../../utils/weight');
-const { today } = require('../../utils/date');
+const { today, formatDateTime } = require('../../utils/date');
 const { UNITS, PAGINATION } = require('../../config/constants');
 
 Page({
@@ -69,7 +69,8 @@ Page({
         // Pre-format weight display values for WXML
         const recordsFormatted = records.map(r => ({
           ...r,
-          _formattedWeight: formatWeight(r.weight, r.unit)
+          _formattedWeight: formatWeight(r.weight, r.unit),
+          _formattedDate: formatDateTime(r.recordedAt)
         }));
         const latestFormatted = stats.latest
           ? formatWeight(stats.latest.weight, stats.latest.unit)

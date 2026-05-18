@@ -109,7 +109,7 @@
       <view class="flex-between">
         <view class="record-info">
           <text class="record-weight">{{item._formattedWeight}}</text>
-          <text class="text-muted record-date">{{item.recordedAt}}</text>
+          <text class="text-muted record-date">{{item._formattedDate}}</text>
         </view>
         <view class="record-actions">
           <button
