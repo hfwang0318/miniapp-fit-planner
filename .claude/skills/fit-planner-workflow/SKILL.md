@@ -22,7 +22,7 @@ description: >
 | 需求澄清 + 路由 + 收尾 | **主对话（你）** | grill-me 澄清需求、范围定义、路由调度、收尾合并 | `grill-me` | 本文件 |
 | Implementer | Agent | 代码链追踪 + 实现 + npm test | `tdd` | `references/agents/implementer.md` |
 | Reviewer | Agent | 代码质量闸门（7 项审查） | `simplify` | `references/agents/reviewer.md` |
-| Validator | Agent | 真实环境验证（禁止纯 mock） | `superpowers:verification-before-completion` | `references/agents/validator.md` |
+| Validator | Agent | 真实环境验证（禁止纯 mock） | — | `references/agents/validator.md` |
 
 ## 工作流
 
@@ -37,6 +37,29 @@ Validator: 真实环境验证 → PASS/FAIL ←───────────
   ↓
 主对话: 收尾 (changelog + git)
 ```
+
+## 阶段执行确认
+
+在每个阶段开始前，主对话必须逐项确认以下检查项，再调度对应 Agent。**未确认不调度。**
+
+### 阶段 1（grill-me）开始前
+- [ ] 使用 Skill 工具加载 `grill-me`
+
+### 阶段 2（Implementer）开始前
+- [ ] 已输出阶段 1 需求 spec
+- [ ] 分支名符合 `feature/<名称>` 或 `fix/<名称>` 规范
+- [ ] Implementer 提示词包含所有引用文件路径
+
+### 阶段 3（Reviewer）开始前
+- [ ] Implementer 报告已输出且代码链追踪完整
+- [ ] `npm test` 全部通过
+
+### 阶段 4（Validator）开始前
+- [ ] Reviewer 报告已输出且状态为 PASS
+
+### 阶段 5（收尾）开始前
+- [ ] 所有 4 道质量门禁已逐项确认通过（见 `references/quality-gates.md`）
+- [ ] `git status` 工作区干净
 
 ### 阶段 1 — 主对话：需求澄清
 
@@ -90,7 +113,6 @@ Implementer 报告在 {implementer_report_path}。
 
 ```
 请先阅读 references/agents/validator.md 了解你的完整职责。
-开始工作前使用 Skill 工具加载 superpowers:verification-before-completion。
 需求 spec 在 {spec_path}。
 Implementer 报告在 {implementer_report_path}。
 Reviewer 报告在 {reviewer_report_path}（如有）。
