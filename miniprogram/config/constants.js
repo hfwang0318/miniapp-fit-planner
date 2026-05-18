@@ -46,7 +46,8 @@ const ERROR_CODES = {
   ALREADY_MEMBER: 'ALREADY_MEMBER',
   NOT_MEMBER: 'NOT_MEMBER',
   DUPLICATE: 'DUPLICATE',
-  AUTH_FAILED: 'AUTH_FAILED'
+  AUTH_FAILED: 'AUTH_FAILED',
+  FUNC_NOT_DEPLOYED: 'FUNC_NOT_DEPLOYED'
 };
 
 const ERROR_MESSAGES = {
@@ -57,7 +58,9 @@ const ERROR_MESSAGES = {
   NOT_OWNER: '无权操作此记录',
   UNAUTHORIZED: '请先登录',
   AUTH_FAILED: '登录失败，请重试',
+  SERVER_ERROR: '服务器错误，请稍后重试',
   NETWORK_ERROR: '网络不可用，请检查网络后重试',
+  FUNC_NOT_DEPLOYED: '云函数未部署，请在开发者工具中右键 cloudfunctions/auth 选择上传并部署',
   INVALID_NAME: '团队名称不能为空',
   INVALID_CODE: '邀请码无效',
   EXPIRED_CODE: '邀请码已过期',

@@ -42,13 +42,13 @@ describe('auth cloud function', () => {
     expect(result.error.code).toBe('INVALID_TYPE');
   });
 
-  test('TC-AUTH-004: missing OPENID returns AUTH_FAILED', async () => {
+  test('TC-AUTH-004: missing OPENID returns UNAUTHORIZED', async () => {
     cloud.__setMockContext({ OPENID: '' });
 
     const { main } = require(path.join(process.cwd(), 'cloudfunctions/auth/index'));
     const result = await main({ type: 'login' }, {});
 
     expect(result.success).toBe(false);
-    expect(result.error.code).toBe('AUTH_FAILED');
+    expect(result.error.code).toBe('UNAUTHORIZED');
   });
 });

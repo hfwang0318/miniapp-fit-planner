@@ -85,3 +85,17 @@ npm run test:integration  # 仅运行集成测试（tests/integration/）
 - 不要为"将来可能需要"做推测性设计
 - 先交付完整的功能闭环，再做优化
 - 如果某个功能不能帮助 4 人团队一起管理体重，就不在 MVP 范围内
+
+## Agent skills
+
+### Issue tracker
+
+GitHub Issues on `hfwang0318/miniapp-fit-planner`. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Standard labels: needs-triage, needs-info, ready-for-agent, ready-for-human, wontfix. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: CONTEXT.md + docs/adr/ at repo root. See `docs/agents/domain.md`.

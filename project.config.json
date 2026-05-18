@@ -46,7 +46,7 @@
   },
   "appid": "wx4bd5c59691312470",
   "projectname": "fit-planner",
-  "libVersion": "2.20.1",
+  "libVersion": "3.16.0",
   "cloudfunctionTemplateRoot": "cloudfunctionTemplate/",
   "condition": {
     "search": {

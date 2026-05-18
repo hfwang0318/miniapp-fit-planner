@@ -52,20 +52,34 @@ const authService = {
         return { success: true, data: userData };
       }
 
-      // Cloud function returned an error
+      // Cloud function returned an error — log full response for diagnosis
       const errorCode = (result.result && result.result.error && result.result.error.code)
         ? result.result.error.code
         : 'AUTH_FAILED';
-      console.error('[auth] cloud function returned error:', errorCode);
+      const errorMsg = result.result && result.result.error && result.result.error.message;
+      console.error('[auth] cloud function returned error:', errorCode, '| message:', errorMsg || '(none)');
+      console.error('[auth] full cloud response:', JSON.stringify(result.result));
       return {
         success: false,
         error: { code: errorCode, message: ERROR_MESSAGES[errorCode] || ERROR_MESSAGES.AUTH_FAILED }
       };
     } catch (err) {
-      console.error('[auth] login exception:', err.message || JSON.stringify(err));
+      const rawMsg = err.errMsg || err.message || JSON.stringify(err);
+      console.error('[auth] cloud.callFunction exception:', rawMsg);
+
+      // Distinguish "function not deployed" from genuine network errors
+      if (rawMsg.includes('function not found') || rawMsg.includes('not found')) {
+        console.error('[auth] Cloud function "auth" is NOT deployed!');
+        console.error('[auth] Action: 右键 cloudfunctions/auth → 上传并部署：云端安装依赖');
+        return {
+          success: false,
+          error: { code: 'FUNC_NOT_DEPLOYED', message: ERROR_MESSAGES.FUNC_NOT_DEPLOYED }
+        };
+      }
+
       return {
         success: false,
-        error: { code: 'AUTH_FAILED', message: ERROR_MESSAGES.AUTH_FAILED }
+        error: { code: 'NETWORK_ERROR', message: ERROR_MESSAGES.NETWORK_ERROR }
       };
     }
   }

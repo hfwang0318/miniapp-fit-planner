@@ -22,7 +22,7 @@ Page({
         // Session already stored by authService.login() — no need to duplicate
         wx.redirectTo({ url: '/pages/dashboard/index' });
       } else {
-        console.error('[login] login failed:', result.error.message || JSON.stringify(result.error));
+        console.error('[login] login failed:', result.error && result.error.message || JSON.stringify(result.error));
         wx.showToast({
           title: result.error && result.error.message || '登录失败，请重试',
           icon: 'none',
