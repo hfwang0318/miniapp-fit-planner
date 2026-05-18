@@ -67,14 +67,14 @@ describe('authService.login()', () => {
     expect(result.error.code).toBe('UNAUTHORIZED');
   });
 
-  test('TC-AUTH-SVC-003: cloud function throws returns AUTH_FAILED', async () => {
+  test('TC-AUTH-SVC-003: cloud function throws returns NETWORK_ERROR', async () => {
     global.wx.cloud.callFunction.mockRejectedValue(new Error('Network error'));
 
     const authService = require('../../../miniprogram/services/auth');
     const result = await authService.login();
 
     expect(result.success).toBe(false);
-    expect(result.error.code).toBe('AUTH_FAILED');
+    expect(result.error.code).toBe('NETWORK_ERROR');
   });
 
   test('TC-AUTH-SVC-004: login stores session in app global state', async () => {

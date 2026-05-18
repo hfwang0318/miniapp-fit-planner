@@ -4,7 +4,7 @@
 // Auth: All operations require valid openid from cloud.getWXContext().OPENID.
 
 const cloud = require('wx-server-sdk');
-cloud.init();
+cloud.init({ env: 'cloud1-d5gl9zvald3fd7fab' });
 const db = cloud.database();
 const _ = db.command;
 

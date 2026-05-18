@@ -138,23 +138,34 @@ async function run(harness) {
       harness.fail('login-result: 无法获取登录后页面状态', e);
     }
 
-    // Step 7: Check runtime errors (exclude expected E2E env errors)
+    // Step 7: Check runtime errors — ALL errors matter for diagnosis
     const errors = auto.collectRuntimeErrors();
-    // Only fail on unexpected errors — not expected cloud function failures in test env
+    // Log all captured errors for diagnosis (no silent filtering)
+    console.log('[E2E-login] 捕获到 ' + errors.length + ' 条运行时日志/错误:');
+    errors.forEach((e, i) => {
+      console.log('  [' + i + '] type=' + e.type + ' page=' + e.pagePath + ' msg=' + (e.message || '').substring(0, 200));
+    });
+
+    // Only filter out errors that are genuinely expected in the E2E test infrastructure
     const unexpectedErrors = errors.filter(e => {
       const msg = (e.message || '').toLowerCase();
-      if (msg.includes('[object object]')) return true; // [object Object] in console → always a bug
-      if (msg.includes('wx.login') || msg.includes('cloud.callfunction')) return false;
-      if (msg.includes('auth') && (msg.includes('fail') || msg.includes('error'))) return false;
-      return false; // In test env, most errors are expected env failures
+      // [object Object] in console → always a code bug (unserialized object)
+      if (msg.includes('[object object]')) return true;
+      // Keep ALL auth and cloudfunction errors — these ARE the bugs we're looking for
+      if (msg.includes('auth') || msg.includes('cloudfunction') || msg.includes('login')) return true;
+      // Keep runtime errors
+      if (e.type === 'error' || e.type === 'runtime') return true;
+      return false;
     });
 
     if (unexpectedErrors.length === 0) {
-      harness.pass('runtime-errors: 无代码缺陷级别的运行时错误');
+      harness.pass('runtime-errors: 无运行时错误，登录流程正常');
     } else {
+      const errorDetails = unexpectedErrors.map(e =>
+        '[' + e.type + '] ' + (e.message || '').substring(0, 150)
+      ).join(' | ');
       harness.fail('runtime-errors',
-        new Error('发现 ' + unexpectedErrors.length + ' 个代码缺陷: ' +
-          JSON.stringify(unexpectedErrors.slice(0, 3))));
+        new Error('发现 ' + unexpectedErrors.length + ' 个运行时错误/警告: ' + errorDetails));
     }
 
   } catch (e) {

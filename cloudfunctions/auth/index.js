@@ -3,7 +3,7 @@
 // NEVER trust client-supplied openid — always use cloud.getWXContext().OPENID.
 
 const cloud = require('wx-server-sdk');
-cloud.init();
+cloud.init({ env: 'cloud1-d5gl9zvald3fd7fab' });
 const db = cloud.database();
 
 /**
@@ -56,7 +56,7 @@ exports.main = async (event, context) => {
     if (!OPENID) {
       return {
         success: false,
-        error: { code: 'AUTH_FAILED', message: '登录失败，请重试' }
+        error: { code: 'UNAUTHORIZED', message: '请先登录' }
       };
     }
 
@@ -72,7 +72,7 @@ exports.main = async (event, context) => {
   } catch (err) {
     return {
       success: false,
-      error: { code: 'AUTH_FAILED', message: '登录失败，请重试' }
+      error: { code: 'SERVER_ERROR', message: '服务器错误，请稍后重试' }
     };
   }
 };

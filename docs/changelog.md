@@ -17,7 +17,33 @@
 
 ---
 
-## Cycle 3 — 修复微信一键登录报错 — 2026-05-16 00:03
+## Cycle 4 — 微信一键登录提示失败（根因修复 + 空值保护） — 2026-05-17 13:18
+<!-- 时间通过 date "+%Y-%m-%d %H:%M" 获取，禁止编造 -->
+
+**类型**：Bug 修复 | **结果**：DONE | **分支**：fix/login-error | **提交**：304ef88 | **迭代**：2 轮
+
+| 步骤 | 版本 | Agent | 结论 | 输出 |
+|------|------|-------|------|------|
+| 1 | — | Orchestrator | 通过 | [step-1](agent-outputs/cycle-4/step-1-orchestrator.md) |
+| 2 | — | Architect | 跳过 | — |
+| 3 | v1 | Tester | 复现（表面） | [step-3-v1](agent-outputs/cycle-4/step-3-tester-v1.md) |
+| 3 | v2 | Tester | 深层复现（根因） | [step-3-v2](agent-outputs/cycle-4/step-3-tester-v2.md) |
+| 4 | v1 | Developer | 完成（空值保护） | [step-4-v1](agent-outputs/cycle-4/step-4-developer-v1.md) |
+| 4 | v2 | Developer | 完成（根因修复） | [step-4-v2](agent-outputs/cycle-4/step-4-developer-v2.md) |
+| 5 | v1 | Reviewer | APPROVED | [step-5-v1](agent-outputs/cycle-4/step-5-reviewer-v1.md) |
+| 5 | v2 | Reviewer | APPROVED | [step-5-v2](agent-outputs/cycle-4/step-5-reviewer-v2.md) |
+| 6 | v1 | Tester | PASS WITH WARNINGS | [step-6-v1](agent-outputs/cycle-4/step-6-tester-v1.md) |
+| 6 | v2 | Tester | PASS | [step-6-v2](agent-outputs/cycle-4/step-6-tester-v2.md) |
+| 7 | — | Orchestrator | DONE | [step-7](agent-outputs/cycle-4/step-7-orchestrator.md) |
+
+### 修复
+- v1：登录页面 `result.error` 访问增加空值保护
+- v2：云函数 `cloud.init()` 添加 `env` 参数（根因）；5 条失败路径错误码区分（UNAUTHORIZED / AUTH_FAILED / SERVER_ERROR / NETWORK_ERROR）
+- 新增 10 个登录回归用例
+
+---
+
+
 
 **结果**：DONE | **分支**：`fix/login-error` | **提交**：待提交 | **迭代**：1 轮
 
