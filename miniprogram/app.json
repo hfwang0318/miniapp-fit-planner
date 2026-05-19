@@ -15,6 +15,6 @@
   "style": "v2",
   "lazyCodeLoading": "requiredComponents",
   "usingComponents": {
-    "sidebar": "/miniprogram/components/sidebar/index"
+    "sidebar": "/components/sidebar/index"
   }
 }

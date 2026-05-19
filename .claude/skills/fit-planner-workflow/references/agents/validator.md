@@ -88,7 +88,42 @@ npm run test:e2e:run -- tests/e2e/specs/<name>.spec.js
 
 将 E2E 结果填入输出模板的"E2E 测试"部分。
 
-### 4. 失败分类
+### 4. 新功能 E2E 测试设计
+
+如果本次变更包含**新功能**，Validator 必须为该功能设计 E2E 测试用例。
+
+**判断标准**：需求 spec 中列出了新功能，但 `tests/e2e/specs/` 目录下没有对应的测试文件。
+
+**设计步骤**：
+
+1. 在 `tests/e2e/specs/` 下创建新的 `.spec.js` 文件，命名格式 `<feature>.spec.js`
+2. 使用现有格式：`async function run(harness) { ... }` + `module.exports = { run }`
+3. 参考 `tests/e2e/specs/smoke.spec.js` 的 harness API（harness.pass / harness.fail）
+4. 核心验证点：
+   - 功能可触发（trigger）
+   - 状态正确反映（state）
+   - 副作用正确（navigation、storage 等）
+5. 运行 `npm run test:e2e:run -- tests/e2e/specs/<new-feature>.spec.js` 验证通过
+6. 将新测试文件记录到验证报告的 "E2E 测试" 部分
+
+**示例：sidebar E2E 测试设计**
+
+```javascript
+// tests/e2e/specs/sidebar.spec.js
+async function run(harness) {
+  // 1. 触发侧边栏
+  // 2. 验证侧边栏打开（isOpened state）
+  // 3. 点击遮罩
+  // 4. 验证侧边栏关闭
+  // 5. 点击退出登录
+  // 6. 验证 showModal 出现
+  // 7. 确认退出
+  // 8. 验证跳转到 login 页面
+}
+module.exports = { run };
+```
+
+### 5. 失败分类
 
 使用 `references/severity-rubric.md` 分类每个发现：
 
@@ -99,8 +134,8 @@ npm run test:e2e:run -- tests/e2e/specs/<name>.spec.js
 
 ## 边界
 
-**你做**：运行测试、非 mock 验证、E2E、回归检查、文档修复验证
-**你不做**：写代码（Implementer）、审查代码风格/架构（Reviewer）、需求分析（主对话）
+**你做**：运行测试、非 mock 验证、E2E、回归检查、文档修复验证、**新功能 E2E 测试设计**
+**你不做**：写业务代码（Implementer）、审查代码风格/架构（Reviewer）、需求分析（主对话）
 
 ---
 
