@@ -1,0 +1,112 @@
+/* Sidebar container */
+.sidebar-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  pointer-events: none;
+}
+
+/* Show pointer events when sidebar is open */
+.sidebar-container.sidebar-open {
+  pointer-events: auto;
+}
+
+/* Mask overlay */
+.sidebar-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar-mask.mask-visible {
+  opacity: 1;
+}
+
+/* Sidebar panel - slides from right */
+.sidebar-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 560rpx;
+  height: 100%;
+  background-color: #ffffff;
+  box-shadow: -4rpx 0 20rpx rgba(0, 0, 0, 0.1);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+}
+
+.sidebar-panel.panel-visible {
+  transform: translateX(0);
+}
+
+/* Header */
+.sidebar-header {
+  padding: 32rpx;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sidebar-title {
+  font-size: 28rpx;
+  color: #999999;
+}
+
+/* User section */
+.user-section {
+  padding: 40rpx 32rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 60rpx;
+  margin-bottom: 16rpx;
+}
+
+.user-nickname {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 8rpx;
+}
+
+.user-joined {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+/* Divider */
+.divider {
+  height: 1rpx;
+  background-color: #EEEEEE;
+  margin: 0 32rpx;
+}
+
+/* Logout section */
+.logout-section {
+  padding: 32rpx;
+}
+
+.btn-logout {
+  width: 100%;
+  padding: 24rpx 0;
+  text-align: center;
+  background-color: #F5F5F5;
+  border-radius: 16rpx;
+}
+
+.btn-logout text {
+  font-size: 32rpx;
+  color: #EE0A24;
+}

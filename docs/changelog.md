@@ -15,6 +15,33 @@
 
 ---
 
+## Cycle 6 — 全局侧边栏组件 — 2026-05-19 10:26
+<!-- 时间通过 date "+%Y-%m-%d %H:%M" 获取，禁止编造 -->
+
+**类型**：feature | **结果**：DONE | **分支**：feature/sidebar | **提交**：待提交 | **迭代**：1 轮
+
+| 步骤 | 版本 | Agent | 结论 | 输出 |
+|------|------|-------|------|------|
+| 1 | — | 主对话 | DONE | [spec](workflow/002-1-spec.md) |
+| 2 | v1 | Implementer | DONE | [report](workflow/002-2-implementer-v1.md) |
+| 3 | v1 | Reviewer | PASS | [report](workflow/002-3-reviewer-v1.md) |
+| 4 | v1 | Validator | PASS | [report](workflow/002-4-validator-v1.md) |
+
+### 新增
+- `miniprogram/components/sidebar/index.{js,wxml,wxss,json}`：全局侧边栏组件，支持滑入动画、遮罩关闭、用户信息展示、退出登录二次确认
+- `miniprogram/mixins/sidebar.js`：Behavior，封装 `sidebarOpen` state、`syncSidebarState()`、`onMenuTap()`，供 dashboard/weight 页面复用
+
+### 变更
+- `miniprogram/app.js`：新增 `showSidebar()` / `hideSidebar()` 方法，`globalData.sidebarOpen` 状态
+- `miniprogram/app.json`：全局注册 `sidebar` 组件
+- `miniprogram/pages/dashboard/index.{js,wxml,wxss}`：导航栏添加菜单按钮（☰），引入 `sidebarBehavior`
+- `miniprogram/pages/weight/index.{js,wxml,wxss}`：导航栏添加菜单按钮，引入 `sidebarBehavior`
+
+### 修复
+- `miniprogram/pages/dashboard/index.wxss:21`：CSS 选择器缺失（`.greeting-section`）
+
+---
+
 ## Cycle 5 — 修复体重记录时间和布局 Bug — 2026-05-18
 <!-- 时间通过 date "+%Y-%m-%d %H:%M" 获取，禁止编造 -->
 

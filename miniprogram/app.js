@@ -1,7 +1,22 @@
 App({
   globalData: {
     user: null,
-    isLoggedIn: false
+    isLoggedIn: false,
+    sidebarOpen: false
+  },
+
+  /**
+   * Show global sidebar
+   */
+  showSidebar() {
+    this.globalData.sidebarOpen = true;
+  },
+
+  /**
+   * Hide global sidebar
+   */
+  hideSidebar() {
+    this.globalData.sidebarOpen = false;
   },
 
   onLaunch() {

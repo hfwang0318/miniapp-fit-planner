@@ -1,5 +1,23 @@
 /* Dashboard page styles */
 
+/* Navigation bar */
+.nav-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 16rpx 32rpx;
+}
+
+.nav-menu {
+  padding: 16rpx;
+}
+
+.menu-icon {
+  font-size: 40rpx;
+  color: #333333;
+}
+
+/* Greeting section */
 .greeting-section {
   padding: 32rpx 0 24rpx;
 }

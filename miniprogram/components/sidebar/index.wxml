@@ -1,0 +1,37 @@
+<!-- Sidebar component: slides in from right -->
+<view class="sidebar-container {{isOpened ? 'sidebar-open' : ''}}">
+  <!-- Mask overlay -->
+  <view
+    class="sidebar-mask {{isOpened ? 'mask-visible' : ''}}"
+    bindtap="onMaskTap"
+  ></view>
+
+  <!-- Sidebar panel -->
+  <view class="sidebar-panel {{isOpened ? 'panel-visible' : ''}}">
+    <!-- Header with close button -->
+    <view class="sidebar-header">
+      <text class="sidebar-title">菜单</text>
+    </view>
+
+    <!-- User info section -->
+    <view class="user-section">
+      <image
+        class="user-avatar"
+        src="{{user.avatarUrl || '/assets/images/default-avatar.png'}}"
+        mode="aspectFill"
+      ></image>
+      <text class="user-nickname">{{user.nickName || '用户'}}</text>
+      <text class="user-joined">加入于 {{_formattedJoinDate}}</text>
+    </view>
+
+    <!-- Divider -->
+    <view class="divider"></view>
+
+    <!-- Logout button -->
+    <view class="logout-section">
+      <view class="btn-logout" bindtap="onLogoutTap">
+        <text>退出登录</text>
+      </view>
+    </view>
+  </view>
+</view>

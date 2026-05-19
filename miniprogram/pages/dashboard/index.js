@@ -1,7 +1,9 @@
 const weightService = require('../../services/weight');
 const { formatWeight } = require('../../utils/weight');
+const sidebarBehavior = require('../../mixins/sidebar');
 
 Page({
+  behaviors: [sidebarBehavior],
   data: {
     records: [],
     latestWeight: null,
@@ -17,6 +19,7 @@ Page({
   onLoad() {
     if (!this.checkAuth()) return;
     this.loadRecentRecords();
+    this.syncSidebarState();
   },
 
   onShow() {
@@ -25,6 +28,7 @@ Page({
     if (!this.data.loading) {
       this.loadRecentRecords();
     }
+    this.syncSidebarState();
   },
 
   checkAuth() {
