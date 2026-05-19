@@ -21,4 +21,54 @@
       <text wx:else>微信一键登录</text>
     </button>
   </view>
+
+  <!-- Nickname setup modal (non-dismissible) -->
+  <view class="modal-overlay" wx:if="{{showNicknameModal}}">
+    <view class="modal-content">
+      <text class="modal-title">设置您的昵称</text>
+
+      <!-- Use WeChat profile button -->
+      <button
+        class="btn-wechat-profile"
+        loading="{{modalLoading}}"
+        bindtap="onUseWechatProfile"
+      >
+        使用微信昵称和头像
+      </button>
+
+      <!-- Divider -->
+      <view class="modal-divider">
+        <view class="divider-line"></view>
+        <text class="divider-text">或</text>
+        <view class="divider-line"></view>
+      </view>
+
+      <!-- Custom nickname input -->
+      <input
+        class="nickname-input"
+        type="text"
+        placeholder="请输入昵称（最多30字符）"
+        maxlength="30"
+        value="{{nicknameInput}}"
+        bindinput="onNicknameInput"
+      />
+
+      <!-- Avatar checkbox (only shown when using custom nickname) -->
+      <checkbox-group class="avatar-checkbox-group" bindchange="onAvatarCheckboxChange">
+        <label class="checkbox-label">
+          <checkbox value="use-wechat-avatar" />
+          <text class="checkbox-text">同时设置微信头像</text>
+        </label>
+      </checkbox-group>
+
+      <!-- Confirm button -->
+      <button
+        class="btn-confirm"
+        loading="{{modalLoading}}"
+        bindtap="onConfirmNickname"
+      >
+        确认
+      </button>
+    </view>
+  </view>
 </view>

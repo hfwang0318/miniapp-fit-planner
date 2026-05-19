@@ -15,6 +15,34 @@
 
 ---
 
+## Cycle 8 — 登录昵称设置弹窗 — 2026-05-19 22:45
+<!-- 时间通过 date "+%Y-%m-%d %H:%M" 获取，禁止编造 -->
+
+**类型**：feature | **结果**：DONE | **分支**：feature/login-nickname-modal | **提交**：待提交 | **迭代**：2 轮
+
+| 步骤 | 版本 | Agent | 结论 | 输出 |
+|------|------|-------|------|------|
+| 1 | — | 主对话 | DONE | [spec](workflow/008-1-spec.md) |
+| 2 | v1 | Implementer | DONE | [report](workflow/008-2-implementer-v1.md) |
+| 3 | v1 | Reviewer | BLOCKED | [report](workflow/008-3-reviewer-v1.md) |
+| 2 | v2 | Implementer | DONE | [report](workflow/008-2-implementer-v2.md) |
+| 3 | v2 | Reviewer | PASS | [report](workflow/008-3-reviewer-v2.md) |
+| 4 | v1 | Validator | PASS | [report](workflow/008-4-validator-v1.md) |
+
+### 新增
+- `cloudfunctions/auth/index.js`：新增 `updateProfile` 类型处理，`handleLogin` 返回 `nickName`/`avatarUrl`
+- `miniprogram/services/auth.js`：新增 `updateProfile()` 方法
+- `miniprogram/app.js`：新增 `updateUserProfile()` 方法
+- `miniprogram/pages/login/index.{js,wxml,wxss,json}`：新增强制性昵称设置弹窗（不可关闭）
+
+### 变更
+- `tests/__mocks__/wx-server-sdk.js`：补充 `where().update()` mock 方法
+- `tests/unit/cloudfunctions/auth.test.js`：新增 TC-AUTH-009/010/011
+- `tests/unit/services/auth.test.js`：新增 TC-AUTH-SVC-009
+- `tests/unit/pages/login.test.js`：新增 TC-LOGIN-009/010/011
+
+---
+
 ## Cycle 7 — 修复 Dashboard 及图表时间格式 — 2026-05-19 21:04
 <!-- 时间通过 date "+%Y-%m-%d %H:%M" 获取，禁止编造 -->
 

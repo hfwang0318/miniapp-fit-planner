@@ -51,4 +51,31 @@ describe('auth cloud function', () => {
     expect(result.success).toBe(false);
     expect(result.error.code).toBe('UNAUTHORIZED');
   });
+
+  test('TC-AUTH-009: handleUpdateProfile updates nickName successfully', async () => {
+    const { main } = require(path.join(process.cwd(), 'cloudfunctions/auth/index'));
+    // First login to create user
+    await main({ type: 'login' }, {});
+    // Then update profile
+    const result = await main({ type: 'updateProfile', nickName: 'TestUser' }, {});
+
+    expect(result.success).toBe(true);
+    expect(result.data.nickName).toBe('TestUser');
+  });
+
+  test('TC-AUTH-010: handleUpdateProfile with empty nickName returns INVALID_PARAMS', async () => {
+    const { main } = require(path.join(process.cwd(), 'cloudfunctions/auth/index'));
+    const result = await main({ type: 'updateProfile', nickName: '' }, {});
+
+    expect(result.success).toBe(false);
+    expect(result.error.code).toBe('INVALID_PARAMS');
+  });
+
+  test('TC-AUTH-011: handleUpdateProfile with too long nickName returns INVALID_PARAMS', async () => {
+    const { main } = require(path.join(process.cwd(), 'cloudfunctions/auth/index'));
+    const result = await main({ type: 'updateProfile', nickName: 'a'.repeat(31) }, {});
+
+    expect(result.success).toBe(false);
+    expect(result.error.code).toBe('INVALID_PARAMS');
+  });
 });
