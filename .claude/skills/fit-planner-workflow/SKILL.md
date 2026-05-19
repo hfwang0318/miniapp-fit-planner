@@ -9,6 +9,11 @@ description: >
 
 # Fit Planner 多 Agent 开发工作流
 
+## 当前状态
+- Cycle: {N} | Step: {M} | Version: v{V}
+- 分支: {branch_name}
+- 本阶段门禁: [ ] 通过
+
 ## 概述
 
 为 fit-planner 微信小程序（面向约 4 人小团队的协作体重管理应用）定义的多 agent 开发工作流。
@@ -20,7 +25,7 @@ description: >
 | 角色 | 执行者 | 职责 | 技能 | 参考文件 |
 |------|--------|------|------|---------|
 | 需求澄清 + 路由 + 收尾 | **主对话（你）** | grill-me 澄清需求、范围定义、路由调度、收尾合并 | `grill-me` | 本文件 |
-| Implementer | Agent | 代码链追踪 + 实现 + npm test | `tdd` | `references/agents/implementer.md` |
+| Implementer | Agent | 代码链追踪 + 实现 + 增量测试 | `tdd` | `references/agents/implementer.md` |
 | Reviewer | Agent | 代码质量闸门（7 项审查） | `simplify` | `references/agents/reviewer.md` |
 | Validator | Agent | 真实环境验证（禁止纯 mock） | — | `references/agents/validator.md` |
 
@@ -29,7 +34,7 @@ description: >
 ```
 主对话: grill-me 需求澄清 → 输出需求 spec
   ↓
-Implementer: 代码链追踪 + 实现 → 输出实现报告
+Implementer: 代码链追踪 + 实现 → 增量测试 → 输出实现报告
   ↓
 Reviewer: 代码审查 → PASS/BLOCKED ←── 打回循环(≤3次) ──┐
   ↓                                                        │
@@ -38,30 +43,9 @@ Validator: 真实环境验证 → PASS/FAIL ←───────────
 主对话: 收尾 (changelog + git)
 ```
 
-## 阶段执行确认
+---
 
-在每个阶段开始前，主对话必须逐项确认以下检查项，再调度对应 Agent。**未确认不调度。**
-
-### 阶段 1（grill-me）开始前
-- [ ] 使用 Skill 工具加载 `grill-me`
-
-### 阶段 2（Implementer）开始前
-- [ ] 已输出阶段 1 需求 spec
-- [ ] 分支名符合 `feature/<名称>` 或 `fix/<名称>` 规范
-- [ ] Implementer 提示词包含所有引用文件路径
-
-### 阶段 3（Reviewer）开始前
-- [ ] Implementer 报告已输出且代码链追踪完整
-- [ ] `npm test` 全部通过
-
-### 阶段 4（Validator）开始前
-- [ ] Reviewer 报告已输出且状态为 PASS
-
-### 阶段 5（收尾）开始前
-- [ ] 所有 4 道质量门禁已逐项确认通过（见 `references/quality-gates.md`）
-- [ ] `git status` 工作区干净
-
-### 阶段 1 — 主对话：需求澄清
+## 阶段 1 — 主对话：需求澄清
 
 1. 使用 Skill 工具加载 `grill-me`
 2. 与用户深入对话，穷尽决策树：
@@ -76,9 +60,11 @@ Validator: 真实环境验证 → PASS/FAIL ←───────────
    - 陈旧文档修复项（如有）
    - 推荐分支名（`feature/<名称>` 或 `fix/<名称>`）
 
-### 阶段 2 — Implementer：代码实现
+---
 
-调度 Implementer agent。提示词中必须包含：
+## 阶段 2 — Implementer：代码实现
+
+调度 Implementer agent：
 
 ```
 请先阅读 references/agents/implementer.md 了解你的完整职责。
@@ -86,14 +72,20 @@ Validator: 真实环境验证 → PASS/FAIL ←───────────
 需求 spec 在 {spec_path}。
 架构约束在 references/architecture-constraints.md。
 请在 {branch_name} 分支上实现。
-输出实现报告到 docs/workflow/{cycle}-2-implementer-v1.md。
+输出实现报告到 docs/workflow/{cycle}-2-implementer-v{V}.md。
 ```
 
-**闸门**：输出报告后，主对话读取确认代码链追踪完整、`npm test` 全部通过。
+**Implementer 门禁**（完成后逐项确认，未通过打回 Implementer）：
+- [ ] 代码链追踪完整（有证据，有文件:行号）
+- [ ] 增量测试全部通过（`npm run test:unit -- --testPathPattern="{相关文件}"` + `npm run test:integration -- --testPathPattern="{相关文件}"`）
+- [ ] 约束合规清单全部确认（见 implementer.md）
+- [ ] 实现报告已输出
 
-### 阶段 3 — Reviewer：代码审查
+---
 
-调度 Reviewer agent。提示词中必须包含：
+## 阶段 3 — Reviewer：代码审查
+
+调度 Reviewer agent：
 
 ```
 请先阅读 references/agents/reviewer.md 了解你的完整职责。
@@ -103,13 +95,20 @@ Implementer 报告在 {implementer_report_path}。
 输出审查报告到 docs/workflow/{cycle}-3-reviewer-v{V}.md。
 ```
 
-**闸门**：
+**Reviewer 门禁**（完成后逐项确认）：
+- [ ] 7 项审查清单全部评估
+- [ ] 严重性按 rubric 正确分级
+- [ ] 无 P0/P1 未解决问题
+
+**结论**：
 - PASS → 阶段 4
 - BLOCKED → 打回阶段 2（v{V+1}）。调度 Implementer 时额外提供 Reviewer 报告路径。
 
-### 阶段 4 — Validator：真实环境验证
+---
 
-调度 Validator agent。提示词中必须包含：
+## 阶段 4 — Validator：真实环境验证
+
+调度 Validator agent：
 
 ```
 请先阅读 references/agents/validator.md 了解你的完整职责。
@@ -118,21 +117,29 @@ Implementer 报告在 {implementer_report_path}。
 Reviewer 报告在 {reviewer_report_path}（如有）。
 严重性标准在 references/severity-rubric.md。
 输出验证报告到 docs/workflow/{cycle}-4-validator-v{V}.md。
-E2E 验证步骤见 references/agents/validator.md，使用 npm run test:e2e:doctor 和 npm run test:e2e。
 ```
 
-**闸门**：
+**Validator 门禁**（完成后逐项确认）：
+- [ ] 增量回归测试无新增 RED（`npm test` 确认无新增失败）
+- [ ] 至少一项非 mock 验证已完成
+- [ ] 目标 E2E spec 通过（`npm run test:e2e:run -- tests/e2e/specs/{相关spec}.spec.js`）
+- [ ] 陈旧文档修复项全部确认
+
+**结论**：
 - PASS → 阶段 5
 - FAIL → 打回阶段 2（v{V+1}）。调度 Implementer 时额外提供 Validator 报告路径。
 
-### 阶段 5 — 主对话：收尾
+---
 
-1. 确认 4 道质量门禁全部通过（详见 `references/quality-gates.md`）
-2. 更新 `docs/changelog.md`（追加周期条目）
-3. 检查 `git status` — 确认工作区干净
-4. 生成提交信息（格式：`type: 描述`）
-5. 合并到 `main` 或推送 PR
-6. **不清理本地开发分支**
+## 阶段 5 — 主对话：收尾
+
+1. 更新 `docs/changelog.md`（追加周期条目）
+2. 检查 `git status` — 确认工作区干净
+3. 生成提交信息（格式：`type: 描述`）
+4. 合并到 `main` 或推送 PR
+5. **不清理本地开发分支**
+
+---
 
 ## 迭代管理
 
@@ -140,6 +147,8 @@ E2E 验证步骤见 references/agents/validator.md，使用 npm run test:e2e:doc
 - 超过 3 次 → 回到阶段 1 重新 grill-me
 - 版本号：v1, v2, v3
 - Changelog 中每次迭代递增一行
+
+---
 
 ## 输出目录
 
@@ -152,6 +161,8 @@ docs/workflow/
 ├── {cycle}-4-validator-v1.md      # Validator
 └── ...
 ```
+
+---
 
 ## Changelog 条目模板
 
@@ -170,6 +181,8 @@ docs/workflow/
 - {file}: {what changed}
 ```
 
+---
+
 ## 参考文件
 
 | 文件 | 用途 | 何时读取 |
@@ -177,6 +190,5 @@ docs/workflow/
 | `references/agents/implementer.md` | Implementer 完整职责 | 阶段 2 调度时 |
 | `references/agents/reviewer.md` | Reviewer 完整职责 | 阶段 3 调度时 |
 | `references/agents/validator.md` | Validator 完整职责 | 阶段 4 调度时 |
-| `references/quality-gates.md` | 4 道质量门禁 | 阶段 5 收尾时 |
-| `references/severity-rubric.md` | 严重性标准 | Reviewer/Validator 共用 |
+| `references/severity-rubric.md` | 严重性标准 | Reviewer/Validator |
 | `references/architecture-constraints.md` | 架构约束、隐私规则 | 阶段 2、3、4 |

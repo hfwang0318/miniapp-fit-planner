@@ -60,14 +60,19 @@
 
 ### 3. 验证阶段
 
+只运行与本次变更相关的增量测试（全量回归由 CI 负责）：
+
 ```bash
-npm test
+# 增量单元测试
+npm run test:unit -- --testPathPattern="{本次相关文件}"
+
+# 增量集成测试
+npm run test:integration -- --testPathPattern="{本次相关文件}"
 ```
 
 确认：
 - 新增测试从 RED 变为 GREEN
-- 回归测试全部通过（0 new failures）
-- 输出无错误、无警告
+- 增量测试全部通过（0 new failures）
 
 ## 约束合规清单
 
