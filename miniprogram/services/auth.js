@@ -82,6 +82,43 @@ const authService = {
         error: { code: 'NETWORK_ERROR', message: ERROR_MESSAGES.NETWORK_ERROR }
       };
     }
+  },
+
+  async updateProfile(nickName, avatarUrl) {
+    try {
+      const result = await wx.cloud.callFunction({
+        name: 'auth',
+        data: {
+          type: 'updateProfile',
+          nickName,
+          avatarUrl: avatarUrl || ''
+        }
+      });
+
+      if (result.result && result.result.success) {
+        // Update local session with new profile data
+        const app = getApp();
+        if (app && typeof app.updateUserProfile === 'function') {
+          app.updateUserProfile({ nickName, avatarUrl: avatarUrl || '' });
+        }
+        return { success: true };
+      }
+
+      const errorCode = (result.result && result.result.error && result.result.error.code) || 'UPDATE_FAILED';
+      const errorMsg = result.result && result.result.error && result.result.error.message;
+      console.error('[auth] updateProfile failed:', errorCode, '| message:', errorMsg || '(none)');
+      return {
+        success: false,
+        error: { code: errorCode, message: ERROR_MESSAGES[errorCode] || ERROR_MESSAGES.SERVER_ERROR }
+      };
+    } catch (err) {
+      const rawMsg = err.errMsg || err.message || JSON.stringify(err);
+      console.error('[auth] updateProfile exception:', rawMsg);
+      return {
+        success: false,
+        error: { code: 'NETWORK_ERROR', message: ERROR_MESSAGES.NETWORK_ERROR }
+      };
+    }
   }
 };
 

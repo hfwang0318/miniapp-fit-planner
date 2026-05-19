@@ -16,6 +16,14 @@ function mockDb() {
               (item) => item.openid === query.openid
             ),
           }),
+          update: async ({ data }) => {
+            const matches = mockCollections[name].filter(
+              (item) => item.openid === query.openid
+            );
+            if (matches.length > 0) {
+              Object.assign(matches[0], data);
+            }
+          },
         }),
         add: async ({ data }) => {
           mockCollections[name].push(data);

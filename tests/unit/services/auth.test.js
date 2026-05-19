@@ -149,4 +149,19 @@ describe('authService.login()', () => {
     expect(result.success).toBe(true);
     expect(result.data.openid).toBe('test-openid-123');
   });
+
+  test('TC-AUTH-SVC-009: updateProfile() calls cloud function successfully', async () => {
+    global.wx.cloud.callFunction.mockResolvedValue({
+      result: { success: true, data: { nickName: 'TestUser', avatarUrl: '' } }
+    });
+
+    const authService = require('../../../miniprogram/services/auth');
+    const result = await authService.updateProfile('TestUser', '');
+
+    expect(result.success).toBe(true);
+    expect(global.wx.cloud.callFunction).toHaveBeenCalledWith({
+      name: 'auth',
+      data: { type: 'updateProfile', nickName: 'TestUser', avatarUrl: '' }
+    });
+  });
 });

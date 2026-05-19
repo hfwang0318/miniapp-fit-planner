@@ -71,5 +71,20 @@ App({
     } catch (e) {
       // Ignore storage errors
     }
+  },
+
+  /**
+   * Update user profile fields in session after profile update.
+   * @param {Object} profileData - { nickName, avatarUrl }
+   */
+  updateUserProfile(profileData) {
+    if (this.globalData.user) {
+      this.globalData.user = { ...this.globalData.user, ...profileData };
+      try {
+        wx.setStorageSync('fit_user_session', this.globalData.user);
+      } catch (e) {
+        // Storage full or unavailable
+      }
+    }
   }
 });

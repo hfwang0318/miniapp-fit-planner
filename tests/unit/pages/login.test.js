@@ -185,4 +185,42 @@ describe('login page onLoginTap()', () => {
 
     expect(wx.redirectTo).toHaveBeenCalledWith({ url: '/pages/dashboard/index' });
   });
+
+  test('TC-LOGIN-009: new user onLoginTap shows nickname modal', async () => {
+    authService.login.mockResolvedValue({
+      success: true,
+      data: { openid: 'test', isNewUser: true, nickName: 'WeChat User' }
+    });
+
+    const instance = createInstance();
+    await instance.onLoginTap();
+
+    expect(instance.setData).toHaveBeenCalledWith({
+      loading: false,
+      showNicknameModal: true,
+      nicknameInput: ''
+    });
+  });
+
+  test('TC-LOGIN-010: onConfirmNickname with empty input shows validation toast', () => {
+    const instance = createInstance({ nicknameInput: '   ', modalLoading: false });
+    instance.onConfirmNickname();
+
+    expect(wx.showToast).toHaveBeenCalledWith({
+      title: '请输入昵称',
+      icon: 'none',
+      duration: 2000
+    });
+  });
+
+  test('TC-LOGIN-011: onConfirmNickname with too long input shows validation toast', () => {
+    const instance = createInstance({ nicknameInput: 'a'.repeat(31), modalLoading: false });
+    instance.onConfirmNickname();
+
+    expect(wx.showToast).toHaveBeenCalledWith({
+      title: '昵称最多30字符',
+      icon: 'none',
+      duration: 2000
+    });
+  });
 });

@@ -41,11 +41,41 @@ async function handleLogin(openid) {
   if (isNewUser) {
     const defaultUser = createDefaultUser(openid);
     await db.collection('User').add({ data: defaultUser });
+    return {
+      success: true,
+      data: { openid, isNewUser, nickName: 'WeChat User', avatarUrl: '' }
+    };
   }
+
+  const existingUser = userResult.data[0];
+  return {
+    success: true,
+    data: { openid, isNewUser, nickName: existingUser.nickName, avatarUrl: existingUser.avatarUrl || '' }
+  };
+}
+
+/**
+ * Handle updateProfile operation.
+ * Updates the user's nickName and/or avatarUrl in their User document.
+ * @param {string} openid
+ * @param {string} nickName
+ * @param {string} [avatarUrl]
+ * @returns {Object} { success, data }
+ */
+async function handleUpdateProfile(openid, nickName, avatarUrl) {
+  if (!nickName || typeof nickName !== 'string' || nickName.length > 30) {
+    return { success: false, error: { code: 'INVALID_PARAMS', message: '昵称无效' } };
+  }
+  const updateData = { nickName };
+  if (avatarUrl !== undefined) {
+    updateData.avatarUrl = avatarUrl;
+  }
+
+  await db.collection('User').where({ openid }).update({ data: updateData });
 
   return {
     success: true,
-    data: { openid, isNewUser }
+    data: { nickName, avatarUrl: avatarUrl || '' }
   };
 }
 
@@ -63,6 +93,8 @@ exports.main = async (event, context) => {
     switch (event.type) {
       case 'login':
         return await handleLogin(OPENID);
+      case 'updateProfile':
+        return await handleUpdateProfile(OPENID, event.nickName, event.avatarUrl);
       default:
         return {
           success: false,
