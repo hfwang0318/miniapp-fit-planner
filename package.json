@@ -39,6 +39,9 @@
       "<rootDir>/tests",
       "<rootDir>/cloudfunctions"
     ],
+    "testPathIgnorePatterns": [
+      "/tests/e2e/specs/"
+    ],
     "moduleNameMapper": {
       "^wx-server-sdk$": "<rootDir>/tests/__mocks__/wx-server-sdk.js"
     }
