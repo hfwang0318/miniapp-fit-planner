@@ -1,5 +1,6 @@
 const weightService = require('../../services/weight');
 const { formatWeight } = require('../../utils/weight');
+const { formatDateTime } = require('../../utils/date');
 const sidebarBehavior = require('../../mixins/sidebar');
 
 Page({
@@ -49,7 +50,8 @@ Page({
         const stats = weightService.getStats(records);
         const recentEntries = records.slice(0, 5).map(r => ({
           ...r,
-          _formattedWeight: formatWeight(r.weight, r.unit)
+          _formattedWeight: formatWeight(r.weight, r.unit),
+          _formattedDate: formatDateTime(r.recordedAt)
         }));
 
         const trend = stats.trend || { direction: 'stable', delta: 0 };

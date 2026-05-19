@@ -1,3 +1,5 @@
+const { formatDateShort } = require('../../utils/date');
+
 Component({
   properties: {
     records: {
@@ -127,7 +129,7 @@ Component({
         const x = paddingLeft + (chartWidth * i) / (sorted.length - 1);
         if (i % xStep === 0 || i === sorted.length - 1) {
           const dateStr = sorted[i].recordedAt;
-          const shortDate = dateStr ? dateStr.substring(5) : '';
+          const shortDate = formatDateShort(dateStr);
           ctx.fillText(shortDate, x, cssHeight - paddingBottom + 16 * rpxToPx);
         }
       }

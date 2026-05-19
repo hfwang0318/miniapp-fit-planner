@@ -15,6 +15,25 @@
 
 ---
 
+## Cycle 7 — 修复 Dashboard 及图表时间格式 — 2026-05-19 21:04
+<!-- 时间通过 date "+%Y-%m-%d %H:%M" 获取，禁止编造 -->
+
+**类型**：Bug 修复 | **结果**：DONE | **分支**：feature/fix-dashboard-date-format | **提交**：待提交 | **迭代**：1 轮
+
+| 步骤 | 版本 | Agent | 结论 | 输出 |
+|------|------|-------|------|------|
+| 1 | — | 主对话 | DONE | [spec](workflow/003-1-spec.md) |
+| 2 | v1 | Implementer | DONE | [report](workflow/003-2-implementer-v1.md) |
+| 3 | v1 | Reviewer | PASS | [report](workflow/003-3-reviewer-v1.md) |
+| 4 | v1 | Validator | PASS | [report](workflow/003-4-validator-v1.md) |
+
+### 修复
+- `miniprogram/pages/dashboard/index.js`：引入 `formatDateTime`，为 `recentEntries` 添加 `_formattedDate` 字段
+- `miniprogram/pages/dashboard/index.wxml`：`{{item.recordedAt}}` → `{{item._formattedDate}}`，显示 `YYYY-MM-DD HH:mm` 格式
+- `miniprogram/components/weight-chart/index.js`：引入 `formatDateShort`，X 轴标签替换 `substring(5)` 截取逻辑，显示 `5月18日` 格式
+
+---
+
 ## Cycle 6 — 全局侧边栏组件 — 2026-05-19 10:26
 <!-- 时间通过 date "+%Y-%m-%d %H:%M" 获取，禁止编造 -->
 
