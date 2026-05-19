@@ -1,4 +1,12 @@
 <view class="page-container">
+  <!-- Navigation bar with menu button -->
+  <view class="nav-bar">
+    <text class="nav-title">记录体重</text>
+    <view class="nav-menu" bindtap="onMenuTap">
+      <text class="menu-icon">☰</text>
+    </view>
+  </view>
+
   <!-- Quick Stats Card -->
   <view class="card stats-card" wx:if="{{records.length > 0}}">
     <view class="flex-between">
@@ -140,4 +148,7 @@
     <text>还没有体重记录</text>
     <text class="text-muted">开始记录吧！</text>
   </view>
+
+  <!-- Sidebar -->
+  <sidebar isOpened="{{sidebarOpen}}" />
 </view>

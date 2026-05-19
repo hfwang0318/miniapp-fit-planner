@@ -3,8 +3,10 @@ const { validate } = require('../../models/weight');
 const { formatWeight } = require('../../utils/weight');
 const { today, formatDateTime } = require('../../utils/date');
 const { UNITS, PAGINATION } = require('../../config/constants');
+const sidebarBehavior = require('../../mixins/sidebar');
 
 Page({
+  behaviors: [sidebarBehavior],
   data: {
     records: [],
     loading: true,
@@ -30,6 +32,7 @@ Page({
       'form.recordedAt': todayStr
     });
     this.loadRecords();
+    this.syncSidebarState();
   },
 
   onShow() {
@@ -37,6 +40,7 @@ Page({
     if (!this.data.loading) {
       this.loadRecords(true);
     }
+    this.syncSidebarState();
   },
 
   onReachBottom() {

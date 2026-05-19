@@ -1,4 +1,12 @@
 <view class="page-container">
+  <!-- Navigation bar with menu button -->
+  <view class="nav-bar">
+    <text class="nav-title"></text>
+    <view class="nav-menu" bindtap="onMenuTap">
+      <text class="menu-icon">☰</text>
+    </view>
+  </view>
+
   <!-- Greeting -->
   <view class="greeting-section">
     <text class="greeting-text">欢迎回来</text>
@@ -64,4 +72,7 @@
   <view wx:if="{{loading}}" class="loading-overlay">
     <text class="text-muted">加载中...</text>
   </view>
+
+  <!-- Sidebar -->
+  <sidebar isOpened="{{sidebarOpen}}" />
 </view>
